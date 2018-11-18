@@ -1,0 +1,21 @@
+{
+  "name": "identifiers-site",
+  "version": "0.0.1",
+  "description": "Site content for http://identifiers.io ",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Identifiers/site.git"
+  },
+  "keywords": [
+    "identifiers"
+  ],
+  "author": "matt@thebishops.org",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Identifiers/site/issues"
+  },
+  "homepage": "https://github.com/Identifiers/site#readme",
+  "dependencies": {
+    "vue.js": "^0.3.2"
+  }
+}

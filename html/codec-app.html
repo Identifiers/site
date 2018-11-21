@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- hex editor component for byte: https://github.com/michbil/hex-works -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,13 +9,12 @@
 <div id="app">
     <input v-model="encoded">
     <p>decoded: {{ decoded }}</p>
+    String: <string-id v-bind:id="singleStringId"></string-id>
+    Boolean: <boolean-id v-bind:id="singleBooleanId"></boolean-id>
 </div>
-<div id="app-2">
-    <span v-bind:title="message">
-        Hover your mouse over me for a few seconds
-        to see my dynamically-bound title!
-    </span>
-</div>
+
+
+
 <div id="app-3">
     <span v-if="seen">Now you see me</span>
 </div>
@@ -52,8 +52,21 @@
 <script src="https://unpkg.com/identifiers-js/dist/identifiers.bundle.js"></script>
 
 <script lang="javascript">
-    var appData = {
-      encoded: "_j80w48"
+
+  Vue.component('string-id', {
+    props: ['id'],
+    template: '<input v-model="id" placeholder="not a string ID"/>'
+  });
+
+  Vue.component('boolean-id', {
+    props: ['id'],
+    template: '<input type="checkbox" v-model="id"/>'
+  });
+
+  var appData = {
+      encoded: "Ç/IÒÁIÖêqÉ34uwâêl7Tþ",
+      singleStringId: null,
+      singleBooleanId: null
     };
     var app = new Vue({
       el: '#app',
@@ -61,7 +74,15 @@
       computed: {
         decoded: function () {
           try {
-            return ID.decodeFromString(this.encoded).toString();
+            var id = ID.decodeFromString(this.encoded);
+            if (id.type === 'boolean') {
+              this.singleBooleanId = id.value;
+              this.singleStringId = null;
+            } else if (id.type === 'string') {
+              this.singleBooleanId = null;
+              this.singleStringId = id.value;
+            }
+            return id.toString();
           }
           catch (e) {
             return "Cannot decode " + this.encoded;
@@ -70,13 +91,6 @@
       }
     });
 
-
-    var app2 = new Vue({
-      el:'#app-2',
-      data: {
-        message: 'You loaded this page on ' + new Date().toLocaleString()
-      }
-    });
     var app3 = new Vue({
       el: '#app-3',
       data: {

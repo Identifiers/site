@@ -9,8 +9,15 @@
 <div id="app">
     <input v-model="encoded">
     <p>decoded: {{ decoded }}</p>
-    <p>String: <string-id/></p>
-    Boolean: <boolean-id/>
+    <p>String:
+        <string-id/>
+    </p>
+    <p>Boolean:
+        <boolean-id/>
+    </p>
+    <draggable v-model="list1" :options="{group:'people'}" @start="drag=true" @end="drag=false">
+        <div v-for="element in list1" :key="element.id">{{element.name}}</div>
+    </draggable>
 </div>
 </body>
 
@@ -19,6 +26,10 @@
 <!-- production version, optimized for size and speed
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 -->
+<!-- CDNJS :: Sortable (https://cdnjs.com/) -->
+<script src="//cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js"></script>
+<!-- CDNJS :: Vue.Draggable (https://cdnjs.com/) -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.15.0/vuedraggable.min.js"></script>
 <script src="https://unpkg.com/identifiers-js/dist/identifiers.bundle.js"></script>
 
 <script lang="javascript">
@@ -26,7 +37,7 @@
   Vue.component('string-id', {
     template: '<div><input placeholder="enter a string value" v-model.trim="value"/><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>',
     data: function () {
-        return { value: "" };
+      return {value: ""};
     },
     computed: {
       encodedData: function () {
@@ -41,7 +52,7 @@
   Vue.component('boolean-id', {
     template: '<div><input type="checkbox" v-model="value"/><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>',
     data: function () {
-      return { value: false };
+      return {value: false};
     },
     computed: {
       encodedData: function () {
@@ -54,22 +65,32 @@
   });
 
   var appData = {
-      encoded: "Ç/IÒÁIÖêqÉ34uwâêl7Tþ"
-    };
-    var app = new Vue({
-      el: '#app',
-      data: appData,
-      computed: {
-        decoded: function () {
-          try {
-            var id = ID.decodeFromString(this.encoded);
-            return id.toString();
-          }
-          catch (e) {
-            return "Cannot decode " + this.encoded;
-          }
+    encoded: "Ç/IÒÁIÖêqÉ34uwâêl7Tþ",
+    list1: [
+      {name: "John", id: 1},
+      {name: "Joao", id: 2},
+      {name: "Jean", id: 3},
+      {name: "Gerard", id: 4},
+      {name: "Juan", id: 5},
+      {name: "Edgar", id: 6},
+      {name: "Jeremy", id: 7}
+    ]
+  };
+
+  var app = new Vue({
+    el: '#app',
+    data: appData,
+    computed: {
+      decoded: function () {
+        try {
+          var id = ID.decodeFromString(this.encoded);
+          return id.toString();
+        }
+        catch (e) {
+          return "Cannot decode " + this.encoded;
         }
       }
-    });
+    }
+  });
 </script>
 </html>

@@ -6,6 +6,19 @@
     <title>Identifiers encode/decode UI</title>
 </head>
 <body>
+
+<!-- development version, includes helpful console warnings -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- production version, optimized for size and speed
+<script src='https://cdn.jsdelivr.net/npm/vue'></script>
+-->
+<!-- CDNJS :: Sortable (https://cdnjs.com/) -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js"></script>
+<!-- CDNJS :: Vue.Draggable (https://cdnjs.com/) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.15.0/vuedraggable.min.js"></script>
+<script src="https://unpkg.com/identifiers-js/dist/identifiers.bundle.js"></script>
+
+
 <div id="app">
     <input v-model="encoded">
     <p>decoded: {{ decoded }}</p>
@@ -15,36 +28,26 @@
     <p>Boolean:
         <boolean-id/>
     </p>
-    <draggable v-model="list1" :options="{group:'people'}" @start="drag=true" @end="drag=false">
-        <div v-for="element in list1" :key="element.id">{{element.name}}</div>
+    <draggable v-model="stringList" @start="drag=true" @end="drag=false">
+        <div v-for="element in stringList" :key="element.id"> {{ element.value }} </div>
     </draggable>
+    Encoded: <string-list-id/>
 </div>
 </body>
-
-<!-- development version, includes helpful console warnings -->
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<!-- production version, optimized for size and speed
-<script src="https://cdn.jsdelivr.net/npm/vue"></script>
--->
-<!-- CDNJS :: Sortable (https://cdnjs.com/) -->
-<script src="//cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js"></script>
-<!-- CDNJS :: Vue.Draggable (https://cdnjs.com/) -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.15.0/vuedraggable.min.js"></script>
-<script src="https://unpkg.com/identifiers-js/dist/identifiers.bundle.js"></script>
 
 <script lang="javascript">
 
   Vue.component('string-id', {
     template: '<div><input placeholder="enter a string value" v-model.trim="value"/><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>',
     data: function () {
-      return {value: ""};
+      return {value: ''};
     },
     computed: {
       encodedData: function () {
-        return this.value ? ID.factory.string(this.value).toDataString() : "";
+        return this.value ? ID.factory.string(this.value).toDataString() : '';
       },
       encodedHuman: function () {
-        return this.value ? ID.factory.string(this.value).toHumanString() : "";
+        return this.value ? ID.factory.string(this.value).toHumanString() : '';
       }
     }
   });
@@ -64,16 +67,35 @@
     }
   });
 
+  Vue.component('string-list-id', {
+    template: '<div>Data: {{ encodedData }}}<br/>Human: {{ encodedHuman }}</div>',
+    data: function () {
+      return {value: []}
+    },
+    computed: {
+      encodedData: function () {
+        return ID.factory.string.list(this.$root.stringList.map(function (e) {
+          return e.value
+        })).toDataString();
+      },
+      encodedHuman: function () {
+        return ID.factory.string.list(this.$root.stringList.map(function (e) {
+          return e.value
+        })).toHumanString();
+      }
+    }
+  });
+
   var appData = {
-    encoded: "Ç/IÒÁIÖêqÉ34uwâêl7Tþ",
-    list1: [
-      {name: "John", id: 1},
-      {name: "Joao", id: 2},
-      {name: "Jean", id: 3},
-      {name: "Gerard", id: 4},
-      {name: "Juan", id: 5},
-      {name: "Edgar", id: 6},
-      {name: "Jeremy", id: 7}
+    encoded: 'Ç/IÒÁIÖêqÉ34uwâêl7Tþ',
+    stringList: [
+      {value: 'John', id: 1},
+      {value: 'Joao', id: 2},
+      {value: 'Jean', id: 3},
+      {value: 'Gerard', id: 4},
+      {value: 'Juan', id: 5},
+      {value: 'Edgar', id: 6},
+      {value: 'Jeremy', id: 7}
     ]
   };
 
@@ -87,7 +109,7 @@
           return id.toString();
         }
         catch (e) {
-          return "Cannot decode " + this.encoded;
+          return 'Cannot decode ' + this.encoded;
         }
       }
     }

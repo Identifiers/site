@@ -20,12 +20,11 @@
 
 
   <div id="app">
-    <input v-model="encoded">
-    <p>decoded: {{ decoded }}</p>
+    Decode: <unknown-encoded></unknown-encoded>
 
-    <p>String: <string-id/></p>
+    <p>String: <string-id></string-id></p>
 
-    <p>Boolean: <boolean-id/></p>
+    <p>Boolean: <boolean-id></boolean-id></p>
 
     <draggable v-model="stringList" @start="drag=true" @end="drag=false">
         <div v-for="element in stringList" :key="element.id"> {{ element.value }} </div>
@@ -37,7 +36,6 @@
 <script lang="javascript">
 
   var appData = {
-    encoded: 'Ç/IÒÁIÖêqÉ34uwâêl7Tþ',
     stringList: [
       {value: 'Abby', id: 1},
       {value: 'Bao', id: 2},
@@ -68,12 +66,32 @@
     }
   });
 
+  Vue.component('unknown-encoded', {
+    template: '<div><string-input v-model="encodedString"/><p>decoded: {{ decodedId }}</p></div>',
+    data: function () {
+      return {
+        encodedString: 'Ç/IÒÁIÖêqÉ34uwâêl7Tþ'
+      };
+    },
+    computed: {
+      decodedId: function () {
+        try {
+          var id = ID.decodeFromString(this.$data.encodedString);
+          return id.toString();
+        }
+        catch (e) {
+          return 'Cannot decode ' + this.$data.encodedString;
+        }
+      }
+    }
+  });
+
   Vue.component('string-id', {
     template: '<div><string-input v-model="stringValue"/><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>',
     data: function () {
         return {
           stringValue: 'matt'
-        }
+        };
     },
     computed: {
       encodedData: function () {
@@ -103,7 +121,7 @@
   });
 
   Vue.component('string-list-id', {
-    template: '<div>Data: {{ encodedData }}}<br/>Human: {{ encodedHuman }}</div>',
+    template: '<div>Data: {{ encodedData }}<br/>Human: {{ encodedHuman }}</div>',
     data: function () {
       return {
         value: []
@@ -126,18 +144,7 @@
 
   var app = new Vue({
     el: '#app',
-    data: appData,
-    computed: {
-      decoded: function () {
-        try {
-          var id = ID.decodeFromString(this.encoded);
-          return id.toString();
-        }
-        catch (e) {
-          return 'Cannot decode ' + this.encoded;
-        }
-      }
-    }
+    data: appData
   });
 </script>
 </html>

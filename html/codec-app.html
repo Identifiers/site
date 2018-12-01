@@ -49,24 +49,27 @@
     ]
   };
 
+  // these have to be named this way so v-model works on parent components
+  var VALUE = 'value';
+  var INPUT = 'input';
 
   Vue.component('string-input', {
-    props: ['input'],
+    props: [VALUE],
     template: '<input placeholder="enter a string value" v-bind:value="strInput" v-on:input="updateInput($event.target.value)"/>',
     data: function () {
       return {
-        strInput: this.input
+        strInput: this[VALUE]
       }
     },
     methods: {
       updateInput: function (value) {
-        this.$emit('update:input', value.trim());
+        this.$emit(INPUT, value.trim());
       }
     }
   });
 
   Vue.component('string-id', {
-    template: '<div><string-input v-bind:input.sync="stringValue"/><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>',
+    template: '<div><string-input v-model="stringValue"/><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>',
     data: function () {
         return {
           stringValue: 'matt'

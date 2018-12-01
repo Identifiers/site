@@ -7,47 +7,77 @@
 </head>
 <body>
 
-<!-- development version, includes helpful console warnings -->
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<!-- production version, optimized for size and speed
-<script src='https://cdn.jsdelivr.net/npm/vue'></script>
--->
-<!-- CDNJS :: Sortable (https://cdnjs.com/) -->
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js"></script>
-<!-- CDNJS :: Vue.Draggable (https://cdnjs.com/) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.15.0/vuedraggable.min.js"></script>
-<script src="https://unpkg.com/identifiers-js/dist/identifiers.bundle.js"></script>
+  <!-- development version, includes helpful console warnings -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <!-- production version, optimized for size and speed
+  <script src='https://cdn.jsdelivr.net/npm/vue'></script>
+  -->
+
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.15.0/vuedraggable.min.js"></script>
+
+  <script src="https://unpkg.com/identifiers-js/dist/identifiers.bundle.js"></script>
 
 
-<div id="app">
+  <div id="app">
     <input v-model="encoded">
     <p>decoded: {{ decoded }}</p>
-    <p>String:
-        <string-id/>
-    </p>
-    <p>Boolean:
-        <boolean-id/>
-    </p>
+
+    <p>String: <string-id/></p>
+
+    <p>Boolean: <boolean-id/></p>
+
     <draggable v-model="stringList" @start="drag=true" @end="drag=false">
         <div v-for="element in stringList" :key="element.id"> {{ element.value }} </div>
     </draggable>
     Encoded: <string-list-id/>
-</div>
+  </div>
 </body>
 
 <script lang="javascript">
 
-  Vue.component('string-id', {
-    template: '<div><input placeholder="enter a string value" v-model.trim="value"/><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>',
+  var appData = {
+    encoded: 'Ç/IÒÁIÖêqÉ34uwâêl7Tþ',
+    stringList: [
+      {value: 'Abby', id: 1},
+      {value: 'Bao', id: 2},
+      {value: 'Callum', id: 3},
+      {value: 'Derek', id: 4},
+      {value: 'Edgar', id: 5},
+      {value: 'Farhad', id: 6},
+      {value: 'Guiseppe', id: 7}
+    ]
+  };
+
+
+  Vue.component('string-input', {
+    props: ['input'],
+    template: '<input placeholder="enter a string value" v-bind:value="strInput" v-on:input="updateInput($event.target.value)"/>',
     data: function () {
-      return {value: ''};
+      return {
+        strInput: this.input
+      }
+    },
+    methods: {
+      updateInput: function (value) {
+        this.$emit('update:input', value.trim());
+      }
+    }
+  });
+
+  Vue.component('string-id', {
+    template: '<div><string-input v-bind:input.sync="stringValue"/><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>',
+    data: function () {
+        return {
+          stringValue: 'matt'
+        }
     },
     computed: {
       encodedData: function () {
-        return this.value ? ID.factory.string(this.value).toDataString() : '';
+        return this.$data.stringValue ? ID.factory.string(this.$data.stringValue).toDataString() : '';
       },
       encodedHuman: function () {
-        return this.value ? ID.factory.string(this.value).toHumanString() : '';
+        return this.$data.stringValue ? ID.factory.string(this.$data.stringValue).toHumanString() : '';
       }
     }
   });
@@ -55,7 +85,9 @@
   Vue.component('boolean-id', {
     template: '<div><input type="checkbox" v-model="value"/><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>',
     data: function () {
-      return {value: false};
+      return {
+        value: false
+      };
     },
     computed: {
       encodedData: function () {
@@ -70,34 +102,24 @@
   Vue.component('string-list-id', {
     template: '<div>Data: {{ encodedData }}}<br/>Human: {{ encodedHuman }}</div>',
     data: function () {
-      return {value: []}
+      return {
+        value: []
+      }
     },
     computed: {
       encodedData: function () {
         return ID.factory.string.list(this.$root.stringList.map(function (e) {
-          return e.value
+          return e.value;
         })).toDataString();
       },
       encodedHuman: function () {
         return ID.factory.string.list(this.$root.stringList.map(function (e) {
-          return e.value
+          return e.value;
         })).toHumanString();
       }
     }
   });
 
-  var appData = {
-    encoded: 'Ç/IÒÁIÖêqÉ34uwâêl7Tþ',
-    stringList: [
-      {value: 'John', id: 1},
-      {value: 'Joao', id: 2},
-      {value: 'Jean', id: 3},
-      {value: 'Gerard', id: 4},
-      {value: 'Juan', id: 5},
-      {value: 'Edgar', id: 6},
-      {value: 'Jeremy', id: 7}
-    ]
-  };
 
   var app = new Vue({
     el: '#app',

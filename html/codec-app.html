@@ -54,7 +54,7 @@
 
   Vue.component('string-input', {
     props: [VALUE],
-    template: '<input placeholder="enter a string value" v-bind:value="strInput" v-on:input="updateInput($event.target.value)"/>',
+    template: '<input placeholder="enter a string value" v-bind:value="strInput" v-on:input="updateInput($event.target.value.trim())"/>',
     data: function () {
       return {
         strInput: this[VALUE]
@@ -62,7 +62,7 @@
     },
     methods: {
       updateInput: function (value) {
-        this.$emit(INPUT, value.trim());
+        this.$emit(INPUT, value);
       }
     }
   });

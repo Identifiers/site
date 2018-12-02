@@ -26,6 +26,7 @@
 
     <p>Boolean: <boolean-id></boolean-id></p>
 
+<!-- todo make this list editable. 'X' to delete, better dragging, '+' to add -->
     <draggable v-model="stringList" @start="drag=true" @end="drag=false">
         <div v-for="element in stringList" :key="element.id"> {{ element.value }} </div>
     </draggable>
@@ -62,6 +63,21 @@
     methods: {
       updateInput: function (value) {
         this.$emit(INPUT, value.trim());
+      }
+    }
+  });
+
+  Vue.component('boolean-input', {
+    props: [VALUE],
+    template: '<input type="checkbox" v-bind:checked="boolInput" v-on:input="updateInput($event.target.checked)"/>',
+    data: function () {
+      return {
+        boolInput: this[VALUE]
+      }
+    },
+    methods: {
+      updateInput: function (value) {
+        this.$emit(INPUT, value);
       }
     }
   });
@@ -104,18 +120,18 @@
   });
 
   Vue.component('boolean-id', {
-    template: '<div><input type="checkbox" v-model="value"/><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>',
+    template: '<div><boolean-input v-model="booleanValue"/><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>',
     data: function () {
       return {
-        value: false
+        booleanValue: true
       };
     },
     computed: {
       encodedData: function () {
-        return ID.factory.boolean(!!this.value).toDataString();
+        return ID.factory.boolean(this.$data.booleanValue).toDataString();
       },
       encodedHuman: function () {
-        return ID.factory.boolean(!!this.value).toHumanString();
+        return ID.factory.boolean(this.$data.booleanValue).toHumanString();
       }
     }
   });

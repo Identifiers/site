@@ -26,9 +26,10 @@
 
     <p>Boolean: <boolean-id></boolean-id></p>
 
-<!-- todo make this list editable. 'X' to delete, better dragging, '+' to add -->
     <draggable v-model="stringList" @start="drag=true" @end="drag=false">
-        <div v-for="element in stringList" :key="element.id"> {{ element.value }} </div>
+        <div v-for="element in stringList" :key="element.id">
+          <string-input v-model="element.value"/>
+        </div>
     </draggable>
     Encoded: <string-list-id/>
   </div>

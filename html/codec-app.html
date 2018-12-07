@@ -13,8 +13,7 @@
   <script src='https://cdn.jsdelivr.net/npm/vue'></script>
   -->
 
-  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.15.0/vuedraggable.min.js"></script>
+  <script src="https://unpkg.com/vue-slicksort@latest/dist/vue-slicksort.min.js"></script>
 
   <script src="https://unpkg.com/identifiers-js/dist/identifiers.bundle.js"></script>
 
@@ -26,12 +25,15 @@
 
     <p>Boolean: <boolean-id></boolean-id></p>
 
+<!--
     <draggable v-model="stringList" @start="drag=true" @end="drag=false">
         <div v-for="element in stringList" :key="element.id">
-          <string-input v-model="element.value"/>
+            <string-input v-model="element.value"></string-input>
         </div>
     </draggable>
-    Encoded: <string-list-id/>
+-->
+      <string-list></string-list>
+      Encoded: <string-list-id></string-list-id>
   </div>
 </body>
 
@@ -39,19 +41,19 @@
 
   var appData = {
     stringList: [
-      {value: 'Abby', id: 1},
-      {value: 'Bao', id: 2},
-      {value: 'Callum', id: 3},
-      {value: 'Derek', id: 4},
-      {value: 'Edgar', id: 5},
-      {value: 'Farhad', id: 6},
-      {value: 'Guiseppe', id: 7}
+      'Abby',
+      'Bao',
+      'Callum',
+      'Derek',
+      'Edgar',
+      'Farhad',
+      'Guiseppe'
     ]
   };
 
   // these have to be named this way so v-model works on parent components
-  var VALUE = 'value';
-  var INPUT = 'input';
+  const VALUE = 'value';
+  const INPUT = 'input';
 
   Vue.component('string-input', {
     props: [VALUE],
@@ -121,7 +123,7 @@
   });
 
   Vue.component('boolean-id', {
-    template: '<div><boolean-input v-model="booleanValue"/><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>',
+    template: `<div><boolean-input v-model="booleanValue"/><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>`,
     data: function () {
       return {
         booleanValue: true
@@ -137,6 +139,29 @@
     }
   });
 
+  const { SlickList, SlickItem } = window.VueSlicksort;
+
+  Vue.component('string-list', {
+    template: `
+    <div>
+      <SlickList lockAxis="y" v-model="this.$root.stringList">
+        <SlickItem v-for="(item, index) in items" :index="index" :key="index">
+          <string-input v-model="items[index]"></string-input>
+        </SlickItem>
+      </SlickList>
+    </div>`,
+    components: {
+      SlickItem,
+      SlickList
+    },
+    data() {
+      return {
+        items: this.$root.stringList
+      };
+    }
+  });
+
+
   Vue.component('string-list-id', {
     template: '<div>Data: {{ encodedData }}<br/>Human: {{ encodedHuman }}</div>',
     data: function () {
@@ -146,14 +171,10 @@
     },
     computed: {
       encodedData: function () {
-        return ID.factory.string.list(this.$root.stringList.map(function (e) {
-          return e.value;
-        })).toDataString();
+        return ID.factory.string.list(this.$root.stringList).toDataString();
       },
       encodedHuman: function () {
-        return ID.factory.string.list(this.$root.stringList.map(function (e) {
-          return e.value;
-        })).toHumanString();
+        return ID.factory.string.list(this.$root.stringList).toHumanString();
       }
     }
   });

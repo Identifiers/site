@@ -25,13 +25,6 @@
 
     <p>Boolean: <boolean-id></boolean-id></p>
 
-<!--
-    <draggable v-model="stringList" @start="drag=true" @end="drag=false">
-        <div v-for="element in stringList" :key="element.id">
-            <string-input v-model="element.value"></string-input>
-        </div>
-    </draggable>
--->
       <string-list></string-list>
       Encoded: <string-list-id></string-list-id>
   </div>
@@ -41,13 +34,13 @@
 
   var appData = {
     stringList: [
-      'Abby',
-      'Bao',
-      'Callum',
-      'Derek',
-      'Edgar',
-      'Farhad',
-      'Guiseppe'
+      {text: 'Abby'},
+      {text: 'Bao'},
+      {text: 'Callum'},
+      {text: 'Derek'},
+      {text: 'Edgar'},
+      {text: 'Farhad'},
+      {text: 'Guiseppe'}
     ]
   };
 
@@ -140,15 +133,16 @@
   });
 
   const { SlickList, SlickItem } = window.VueSlicksort;
-
+// I wonder if dragging the component causes a whole new item list to be produced and the old listeners are not attached?
   Vue.component('string-list', {
     template: `
     <div>
-      <SlickList lockAxis="y" v-model="this.$root.stringList">
-        <SlickItem v-for="(item, index) in items" :index="index" :key="index">
-          <string-input v-model="items[index]"></string-input>
+      <SlickList v-model="items">
+        <SlickItem v-for="(item, index) in items" :key="index" :index="index">
+          <string-input v-model="item.text"></string-input>{{ item.text }}
         </SlickItem>
       </SlickList>
+      <button v-on:click="createNewItem">Add New Item</button>
     </div>`,
     components: {
       SlickItem,
@@ -158,6 +152,11 @@
       return {
         items: this.$root.stringList
       };
+    },
+    methods: {
+      createNewItem() {
+        this.items.push({text: ''});
+      }
     }
   });
 
@@ -171,16 +170,16 @@
     },
     computed: {
       encodedData: function () {
-        return ID.factory.string.list(this.$root.stringList).toDataString();
+        return ID.factory.string.list(this.$root.stringList.map(v => v.text)).toDataString();
       },
       encodedHuman: function () {
-        return ID.factory.string.list(this.$root.stringList).toHumanString();
+        return ID.factory.string.list(this.$root.stringList.map(v => v.text)).toHumanString();
       }
     }
   });
 
 
-  var app = new Vue({
+  const app = new Vue({
     el: '#app',
     data: appData
   });

@@ -31,18 +31,6 @@
 
 <script lang="javascript">
 
-  var appData = {
-    stringList: [
-      {text: 'Abby'},
-      {text: 'Bao'},
-      {text: 'Callum'},
-      {text: 'Derek'},
-      {text: 'Edgar'},
-      {text: 'Farhad'},
-      {text: 'Guiseppe'}
-    ]
-  };
-
   // these have to be named this way so v-model works on parent components
   const VALUE = 'value';
   const INPUT = 'input';
@@ -50,13 +38,11 @@
   Vue.component('string-input', {
     props: [VALUE],
     template: '<input placeholder="enter a string value" v-bind:value="strInput" v-on:input="updateInput($event.target.value.trim())"/>',
-    data: function () {
-      return {
-        strInput: this[VALUE]
-      }
+      data() {
+      return { strInput: this[VALUE] };
     },
     methods: {
-      updateInput: function (value) {
+      updateInput(value) {
         this.$emit(INPUT, value);
       }
     }
@@ -65,13 +51,11 @@
   Vue.component('boolean-input', {
     props: [VALUE],
     template: '<input type="checkbox" v-bind:checked="boolInput" v-on:input="updateInput($event.target.checked)"/>',
-    data: function () {
-      return {
-        boolInput: this[VALUE]
-      }
+    data() {
+      return { boolInput: this[VALUE] };
     },
     methods: {
-      updateInput: function (value) {
+      updateInput(value) {
         this.$emit(INPUT, value);
       }
     }
@@ -79,16 +63,11 @@
 
   Vue.component('unknown-encoded', {
     template: '<div><string-input v-model="encodedString"/><p>decoded: {{ decodedId }}</p></div>',
-    data: function () {
-      return {
-        encodedString: 'Ç/IÒÁIÖêqÉ34uwâêl7Tþ'
-      };
-    },
+    data: () => ({ encodedString: 'Ç/IÒÁIÖêqÉ34uwâêl7Tþ' }),
     computed: {
-      decodedId: function () {
+      decodedId() {
         try {
-          var id = ID.decodeFromString(this.$data.encodedString);
-          return id.toString();
+          return ID.decodeFromString(this.$data.encodedString).toString();
         }
         catch (e) {
           return 'Cannot decode ' + this.$data.encodedString;
@@ -99,16 +78,12 @@
 
   Vue.component('string-id', {
     template: '<div><string-input v-model="stringValue"/><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>',
-    data: function () {
-        return {
-          stringValue: 'matt'
-        };
-    },
+    data: () => ({ stringValue: 'matt' }),
     computed: {
-      encodedData: function () {
+      encodedData() {
         return this.$data.stringValue ? ID.factory.string(this.$data.stringValue).toDataString() : '';
       },
-      encodedHuman: function () {
+      encodedHuman() {
         return this.$data.stringValue ? ID.factory.string(this.$data.stringValue).toHumanString() : '';
       }
     }
@@ -116,16 +91,12 @@
 
   Vue.component('boolean-id', {
     template: `<div><boolean-input v-model="booleanValue"/><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>`,
-    data: function () {
-      return {
-        booleanValue: true
-      };
-    },
+    data: () => ({ booleanValue: true }),
     computed: {
-      encodedData: function () {
+      encodedData() {
         return ID.factory.boolean(this.$data.booleanValue).toDataString();
       },
-      encodedHuman: function () {
+      encodedHuman() {
         return ID.factory.boolean(this.$data.booleanValue).toHumanString();
       }
     }
@@ -138,36 +109,45 @@
     <div>
       <SlickList v-model="items">
         <SlickItem v-for="(item, index) in items" :key="index" :index="index">
-          <string-input v-model="item.text"></string-input>{{ item.text }}
+          <button @click="deleteItem(index)">-</button><string-input v-model="item.text"></string-input>{{ item.text }}
         </SlickItem>
       </SlickList>
-      <button v-on:click="createNewItem">Add New Item</button>
+      <button @click="createNewItem">Add New Item</button>
       <br/>
       List: {{ idDebugString }}<br/>
-      Data: {{ encodedData }}, Human: {{ encodedHuman }}
+      Data: {{ encodedData }}<br/>Human: {{ encodedHuman }}
     </div>`,
     components: {
       SlickItem,
       SlickList
     },
-    data() {
-      return {
-        items: this.$root.stringList
-      };
-    },
+    data: () => ({
+        items: [
+          {text: 'Abby'},
+          {text: 'Bao'},
+          {text: 'Callum'},
+          {text: 'Derek'},
+          {text: 'Edgar'},
+          {text: 'Farhad'},
+          {text: 'Guiseppe'}
+        ]
+    }),
     methods: {
-      createNewItem: function () {
+      createNewItem() {
         this.items.push({text: ''});
+      },
+      deleteItem(index) {
+        this.items.splice(index, 1);
       }
     },
     computed: {
-      idDebugString: function () {
+      idDebugString() {
         return this.$data.items.map(v => v.text);
       },
-      encodedData: function () {
+      encodedData() {
         return ID.factory.string.list(this.$data.items.map(v => v.text)).toDataString();
       },
-      encodedHuman: function () {
+      encodedHuman() {
         return ID.factory.string.list(this.$data.items.map(v => v.text)).toHumanString();
       }
     }
@@ -175,7 +155,6 @@
 
   const app = new Vue({
     el: '#app',
-    data: appData
   });
 </script>
 </html>

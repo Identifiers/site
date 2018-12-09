@@ -23,10 +23,9 @@
 
     <p>String: <string-id></string-id></p>
 
-    <p>Boolean: <boolean-id></boolean-id></p>
+    <string-list-id></string-list-id>
 
-      <string-list></string-list>
-      Encoded: <string-list-id></string-list-id>
+    <p>Boolean: <boolean-id></boolean-id></p>
   </div>
 </body>
 
@@ -133,8 +132,8 @@
   });
 
   const { SlickList, SlickItem } = window.VueSlicksort;
-// I wonder if dragging the component causes a whole new item list to be produced and the old listeners are not attached?
-  Vue.component('string-list', {
+
+  Vue.component('string-list-id', {
     template: `
     <div>
       <SlickList v-model="items">
@@ -143,6 +142,9 @@
         </SlickItem>
       </SlickList>
       <button v-on:click="createNewItem">Add New Item</button>
+      <br/>
+      List: {{ idDebugString }}<br/>
+      Data: {{ encodedData }}, Human: {{ encodedHuman }}
     </div>`,
     components: {
       SlickItem,
@@ -154,30 +156,22 @@
       };
     },
     methods: {
-      createNewItem() {
+      createNewItem: function () {
         this.items.push({text: ''});
-      }
-    }
-  });
-
-
-  Vue.component('string-list-id', {
-    template: '<div>Data: {{ encodedData }}<br/>Human: {{ encodedHuman }}</div>',
-    data: function () {
-      return {
-        value: []
       }
     },
     computed: {
+      idDebugString: function () {
+        return this.$data.items.map(v => v.text);
+      },
       encodedData: function () {
-        return ID.factory.string.list(this.$root.stringList.map(v => v.text)).toDataString();
+        return ID.factory.string.list(this.$data.items.map(v => v.text)).toDataString();
       },
       encodedHuman: function () {
-        return ID.factory.string.list(this.$root.stringList.map(v => v.text)).toHumanString();
+        return ID.factory.string.list(this.$data.items.map(v => v.text)).toHumanString();
       }
     }
   });
-
 
   const app = new Vue({
     el: '#app',

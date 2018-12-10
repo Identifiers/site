@@ -13,7 +13,7 @@
   <script src='https://cdn.jsdelivr.net/npm/vue'></script>
   -->
 
-  <script src="https://unpkg.com/vue-slicksort@latest/dist/vue-slicksort.min.js"></script>
+  <script src="https://unpkg.com/vue-slicksort@latest/dist/vue-slicksort.umd.js"></script>
 
   <script src="https://unpkg.com/identifiers-js/dist/identifiers.bundle.js"></script>
 
@@ -102,13 +102,15 @@
     }
   });
 
+  const wrapItem = (text) => ({text: text, id: Math.random()});
+
   const { SlickList, SlickItem } = window.VueSlicksort;
 
   Vue.component('string-list-id', {
     template: `
     <div>
       <SlickList v-model="items">
-        <SlickItem v-for="(item, index) in items" :key="index" :index="index">
+        <SlickItem v-for="(item, index) in items" :key="item.id" :index="index">
           <button @click="deleteItem(index)">-</button><string-input v-model="item.text"></string-input>{{ item.text }}
         </SlickItem>
       </SlickList>
@@ -122,19 +124,11 @@
       SlickList
     },
     data: () => ({
-        items: [
-          {text: 'Abby'},
-          {text: 'Bao'},
-          {text: 'Callum'},
-          {text: 'Derek'},
-          {text: 'Edgar'},
-          {text: 'Farhad'},
-          {text: 'Guiseppe'}
-        ]
+      items: ['Abby', 'Bao', 'Callum', 'Derek', 'Edgar', 'Farhad', 'Guiseppe'].map(wrapItem)
     }),
     methods: {
       createNewItem() {
-        this.items.push({text: ''});
+        this.items.push(wrapItem(''));
       },
       deleteItem(index) {
         this.items.splice(index, 1);

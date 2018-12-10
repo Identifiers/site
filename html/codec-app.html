@@ -26,6 +26,18 @@
     <string-list-id></string-list-id>
 
     <p>Boolean: <boolean-id></boolean-id></p>
+    <!--
+    TODO
+    * Boolean list
+    * integer / list
+    * float / list
+    * long / list
+    * bytes / list
+    * datetime / list
+    * uuid / list
+    * geo / list
+    * composite list / map
+    -->
   </div>
 </body>
 
@@ -70,7 +82,7 @@
           return ID.decodeFromString(this.$data.encodedString).toString();
         }
         catch (e) {
-          return 'Cannot decode ' + this.$data.encodedString;
+          return `Cannot decode ${this.$data.encodedString}`;
         }
       }
     }
@@ -102,7 +114,7 @@
     }
   });
 
-  const wrapItem = (text) => ({text: text, id: Math.random()});
+  const wrapItem = (content) => ({content: content, id: Math.random()});
 
   const { SlickList, SlickItem } = window.VueSlicksort;
 
@@ -111,7 +123,7 @@
     <div>
       <SlickList v-model="items">
         <SlickItem v-for="(item, index) in items" :key="item.id" :index="index">
-          <button @click="deleteItem(index)">-</button><string-input v-model="item.text"></string-input>{{ item.text }}
+          <button @click="deleteItem(index)">-</button><string-input v-model="item.content"></string-input>{{ item.content }}
         </SlickItem>
       </SlickList>
       <button @click="createNewItem">Add New Item</button>
@@ -136,13 +148,13 @@
     },
     computed: {
       idDebugString() {
-        return this.$data.items.map(v => v.text);
+        return this.$data.items.map(v => v.content);
       },
       encodedData() {
-        return ID.factory.string.list(this.$data.items.map(v => v.text)).toDataString();
+        return ID.factory.string.list(this.$data.items.map(v => v.content)).toDataString();
       },
       encodedHuman() {
-        return ID.factory.string.list(this.$data.items.map(v => v.text)).toHumanString();
+        return ID.factory.string.list(this.$data.items.map(v => v.content)).toHumanString();
       }
     }
   });

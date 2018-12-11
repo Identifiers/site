@@ -28,14 +28,15 @@
     <p>Boolean: <boolean-id></boolean-id></p>
     <!--
     TODO
-    * Boolean list
-    * integer / list
-    * float / list
-    * long / list
-    * bytes / list
-    * datetime / list
-    * uuid / list
-    * geo / list
+    * string map
+    * Boolean list / map
+    * integer / list / map
+    * float / list / map
+    * long / list / map
+    * bytes / list / map
+    * datetime / list / map
+    * uuid / list / map
+    * geo / list / map
     * composite list / map
     -->
   </div>
@@ -47,30 +48,26 @@
   const VALUE = 'value';
   const INPUT = 'input';
 
-  Vue.component('string-input', {
+  const baseInputComponent = {
     props: [VALUE],
-    template: '<input placeholder="enter a string value" v-bind:value="strInput" v-on:input="updateInput($event.target.value.trim())"/>',
-      data() {
-      return { strInput: this[VALUE] };
+    data() {
+      return {valueInput: this[VALUE]};
     },
     methods: {
       updateInput(value) {
         this.$emit(INPUT, value);
       }
     }
+  };
+
+  Vue.component('string-input', {
+    ...baseInputComponent,
+    template: '<input placeholder="enter a string value" v-bind:value="valueInput" v-on:input="updateInput($event.target.value.trim())"/>',
   });
 
   Vue.component('boolean-input', {
-    props: [VALUE],
-    template: '<input type="checkbox" v-bind:checked="boolInput" v-on:input="updateInput($event.target.checked)"/>',
-    data() {
-      return { boolInput: this[VALUE] };
-    },
-    methods: {
-      updateInput(value) {
-        this.$emit(INPUT, value);
-      }
-    }
+    ...baseInputComponent,
+    template: '<input type="checkbox" v-bind:checked="valueInput" v-on:input="updateInput($event.target.checked)"/>',
   });
 
   Vue.component('unknown-encoded', {
@@ -129,7 +126,8 @@
       <button @click="createNewItem">Add New Item</button>
       <br/>
       List: {{ idDebugString }}<br/>
-      Data: {{ encodedData }}<br/>Human: {{ encodedHuman }}
+      Data: {{ encodedData }}<br/>
+      Human: {{ encodedHuman }}
     </div>`,
     components: {
       SlickItem,

@@ -103,19 +103,21 @@
   }
 
   const {HandleDirective, SlickList, SlickItem} = window.VueSlicksort;
+  Vue.directive('handle', HandleDirective);
+
   const wrapItem = (content) => ({content: content, id: Math.random()});
 
   function createIdList(inputType, listFactory, data, newItem) {
     return {
       components: {
-        SlickItem,
-        SlickList
+        SlickList,
+        SlickItem
       },
       template: `
         <div>
-          <SlickList lockAxis="y" v-model="items">
+          <SlickList lockAxis="y" :useDragHandle="true" :lockToContainerEdges="true" v-model="items">
             <SlickItem v-for="(item, index) in items" :key="item.id" :index="index">
-              <button @click="deleteItem(index)">-</button><${inputType} v-model="item.content"></${inputType}>{{ item.content }}
+              <span v-handle class="handle">≡</span><button @click="deleteItem(index)">-</button><${inputType} v-model="item.content"></${inputType}>{{ item.content }}
             </SlickItem>
           </SlickList>
           <button @click="createNewItem">Add New Item</button>

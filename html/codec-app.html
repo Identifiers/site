@@ -64,12 +64,12 @@
 
   Vue.component('string-input', {
     ...baseInputComponent,
-    template: '<input placeholder="enter a string value" v-bind:value="valueInput" v-on:input="updateInput($event.target.value.trim())"/>',
+    template: '<input placeholder="enter a string value" v-bind:value="valueInput" @input="updateInput($event.target.value.trim())"/>',
   });
 
   Vue.component('boolean-input', {
     ...baseInputComponent,
-    template: '<input type="checkbox" v-bind:checked="valueInput" v-on:input="updateInput($event.target.checked)"/>',
+    template: '<input type="checkbox" v-bind:checked="valueInput" @input="updateInput($event.target.checked)"/>',
   });
 
   Vue.component('unknown-encoded', {
@@ -102,7 +102,7 @@
     };
   }
 
-  const {SlickList, SlickItem} = window.VueSlicksort;
+  const {HandleDirective, SlickList, SlickItem} = window.VueSlicksort;
   const wrapItem = (content) => ({content: content, id: Math.random()});
 
   function createIdList(inputType, listFactory, data, newItem) {
@@ -113,7 +113,7 @@
       },
       template: `
         <div>
-          <SlickList v-model="items">
+          <SlickList lockAxis="y" v-model="items">
             <SlickItem v-for="(item, index) in items" :key="item.id" :index="index">
               <button @click="deleteItem(index)">-</button><${inputType} v-model="item.content"></${inputType}>{{ item.content }}
             </SlickItem>

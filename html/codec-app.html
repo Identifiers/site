@@ -31,7 +31,7 @@
     <!--
     TODO
     * string map
-    * Boolean list / map
+    * Boolean map
     * integer / list / map
     * float / list / map
     * long / list / map
@@ -87,119 +87,79 @@
     }
   });
 
-  const wrapItem = (content) => ({content: content, id: Math.random()});
+  function createId(inputType, factory, value) {
+    return {
+      template: `<div><${inputType} v-model="inputValue"></${inputType}><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>`,
+      data: () => ({inputValue: value}),
+      computed: {
+        encodedData() {
+          return factory(this.$data.inputValue).toDataString();
+        },
+        encodedHuman() {
+          return factory(this.$data.inputValue).toHumanString();
+        }
+      }
+    };
+  }
 
   const {SlickList, SlickItem} = window.VueSlicksort;
+  const wrapItem = (content) => ({content: content, id: Math.random()});
 
-  Vue.component('string-id', {
-    template: '<div><string-input v-model="stringValue"/><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>',
-    data: () => ({ stringValue: 'matt' }),
-    computed: {
-      encodedData() {
-        return this.$data.stringValue ? ID.factory.string(this.$data.stringValue).toDataString() : '';
+  function createIdList(inputType, listFactory, data, newItem) {
+    return {
+      components: {
+        SlickItem,
+        SlickList
       },
-      encodedHuman() {
-        return this.$data.stringValue ? ID.factory.string(this.$data.stringValue).toHumanString() : '';
+      template: `
+        <div>
+          <SlickList v-model="items">
+            <SlickItem v-for="(item, index) in items" :key="item.id" :index="index">
+              <button @click="deleteItem(index)">-</button><${inputType} v-model="item.content"></${inputType}>{{ item.content }}
+            </SlickItem>
+          </SlickList>
+          <button @click="createNewItem">Add New Item</button>
+          <br/>
+          List: {{ idDebugString }}<br/>
+          Data: {{ encodedData }}<br/>
+          Human: {{ encodedHuman }}
+        </div>`,
+      data: () => ({
+        items: data.map(wrapItem)
+      }),
+      methods: {
+        createNewItem() {
+          this.items.push(wrapItem(newItem()));
+        },
+        deleteItem(index) {
+          this.items.splice(index, 1);
+        }
+      },
+      computed: {
+        idDebugString() {
+          return this.$data.items.map(v => v.content);
+        },
+        encodedData() {
+          return listFactory(this.$data.items.map(v => v.content)).toDataString();
+        },
+        encodedHuman() {
+          return listFactory(this.$data.items.map(v => v.content)).toHumanString();
+        }
       }
-    }
-  });
+    };
+  }
 
-  Vue.component('string-list-id', {
-    template: `
-    <div>
-      <SlickList v-model="items">
-        <SlickItem v-for="(item, index) in items" :key="item.id" :index="index">
-          <button @click="deleteItem(index)">-</button><string-input v-model="item.content"></string-input>{{ item.content }}
-        </SlickItem>
-      </SlickList>
-      <button @click="createNewItem">Add New Item</button>
-      <br/>
-      List: {{ idDebugString }}<br/>
-      Data: {{ encodedData }}<br/>
-      Human: {{ encodedHuman }}
-    </div>`,
-    components: {
-      SlickItem,
-      SlickList
-    },
-    data: () => ({
-      items: ['Abby', 'Bao', 'Callum', 'Derek', 'Edgar', 'Farhad', 'Guiseppe'].map(wrapItem)
-    }),
-    methods: {
-      createNewItem() {
-        this.items.push(wrapItem(''));
-      },
-      deleteItem(index) {
-        this.items.splice(index, 1);
-      }
-    },
-    computed: {
-      idDebugString() {
-        return this.$data.items.map(v => v.content);
-      },
-      encodedData() {
-        return ID.factory.string.list(this.$data.items.map(v => v.content)).toDataString();
-      },
-      encodedHuman() {
-        return ID.factory.string.list(this.$data.items.map(v => v.content)).toHumanString();
-      }
-    }
-  });
+  Vue.component('string-id', createId('string-input', ID.factory.string, 'matt'));
 
-  Vue.component('boolean-id', {
-    template: `<div><boolean-input v-model="booleanValue"/><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>`,
-    data: () => ({ booleanValue: true }),
-    computed: {
-      encodedData() {
-        return ID.factory.boolean(this.$data.booleanValue).toDataString();
-      },
-      encodedHuman() {
-        return ID.factory.boolean(this.$data.booleanValue).toHumanString();
-      }
-    }
-  });
+  Vue.component('string-list-id', createIdList('string-input', ID.factory.string.list,
+    ['Abby', 'Bao', 'Callum', 'Derek', 'Edgar', 'Farhad', 'Guiseppe'],
+    () => ''));
 
-  Vue.component('boolean-list-id', {
-    template: `
-    <div>
-      <SlickList v-model="items">
-        <SlickItem v-for="(item, index) in items" :key="item.id" :index="index">
-          <button @click="deleteItem(index)">-</button><boolean-input v-model="item.content"></boolean-input>{{ item.content }}
-        </SlickItem>
-      </SlickList>
-      <button @click="createNewItem">Add New Item</button>
-      <br/>
-      List: {{ idDebugString }}<br/>
-      Data: {{ encodedData }}<br/>
-      Human: {{ encodedHuman }}
-    </div>`,
-    components: {
-      SlickItem,
-      SlickList
-    },
-    data: () => ({
-      items: [true, false, true].map(wrapItem)
-    }),
-    methods: {
-      createNewItem() {
-        this.items.push(wrapItem(false));
-      },
-      deleteItem(index) {
-        this.items.splice(index, 1);
-      }
-    },
-    computed: {
-      idDebugString() {
-        return this.$data.items.map(v => v.content);
-      },
-      encodedData() {
-        return ID.factory.boolean.list(this.$data.items.map(v => v.content)).toDataString();
-      },
-      encodedHuman() {
-        return ID.factory.boolean.list(this.$data.items.map(v => v.content)).toHumanString();
-      }
-    }
-  });
+  Vue.component('boolean-id', createId('boolean-input', ID.factory.boolean, true));
+
+  Vue.component('boolean-list-id', createIdList('boolean-input', ID.factory.boolean.list,
+    [true, false, true],
+    () => false));
 
   const app = new Vue({
     el: '#app',

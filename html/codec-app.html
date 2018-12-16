@@ -22,16 +22,14 @@
     Decode: <unknown-encoded></unknown-encoded>
 
     <p>String: <string-id></string-id></p>
-
     <string-list-id></string-list-id>
+    <string-map-id></string-map-id>
 
     <p>Boolean: <boolean-id></boolean-id></p>
-
     <boolean-list-id></boolean-list-id>
+    <boolean-map-id></boolean-map-id>
     <!--
     TODO
-    * string map
-    * Boolean map
     * integer / list / map
     * float / list / map
     * long / list / map
@@ -72,21 +70,6 @@
     template: '<input type="checkbox" v-bind:checked="valueInput" @input="updateInput($event.target.checked)"/>',
   });
 
-  Vue.component('unknown-encoded', {
-    template: '<div><string-input v-model="encodedString"/><p>decoded: {{ decodedId }}</p></div>',
-    data: () => ({ encodedString: 'Ç/IÒÁIÖêqÉ34uwâêl7Tþ' }),
-    computed: {
-      decodedId() {
-        try {
-          return ID.decodeFromString(this.$data.encodedString).toString();
-        }
-        catch (e) {
-          return `Cannot decode ${this.$data.encodedString}`;
-        }
-      }
-    }
-  });
-
   function createId(inputType, factory, value) {
     return {
       template: `<div><${inputType} v-model="inputValue"></${inputType}><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>`,
@@ -105,7 +88,14 @@
   const {HandleDirective, SlickList, SlickItem} = window.VueSlicksort;
   Vue.directive('handle', HandleDirective);
 
-  const wrapItem = (content) => ({content: content, id: Math.random()});
+
+  function wrapItem(content, key) {
+    return {
+      id: Math.random(),
+      content,
+      key
+    };
+  }
 
   function createIdList(inputType, listFactory, data, newItem) {
     return {
@@ -135,21 +125,93 @@
         },
         deleteItem(index) {
           this.items.splice(index, 1);
+        },
+        unwrapItems() {
+          return this.$data.items.map(item => item.content);
         }
       },
       computed: {
         idDebugString() {
-          return this.$data.items.map(v => v.content);
+          return this.unwrapItems();
         },
         encodedData() {
-          return listFactory(this.$data.items.map(v => v.content)).toDataString();
+          return listFactory(this.unwrapItems()).toDataString();
         },
         encodedHuman() {
-          return listFactory(this.$data.items.map(v => v.content)).toHumanString();
+          return listFactory(this.unwrapItems()).toHumanString();
         }
       }
     };
   }
+
+  function createIdMap(inputType, mapFactory, data, newItem) {
+    return {
+      template: `
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Key</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in items" :key="item.id" :index="index">
+                <td><button @click="deleteItem(index)">-</button></td>
+                <td><string-input v-model="item.key"></string-input></td>
+                <td><${inputType} v-model="item.content"></${inputType}></td>
+              </tr>
+            </tbody>
+          </table>
+          <button @click="createNewItem">Add New Mapping</button>
+          <br/>
+          Map: {{ idDebugString }}<br/>
+          Data: {{ encodedData }}<br/>
+          Human: {{ encodedHuman }}
+        </div>`,
+      data: () => ({
+        items: Object.entries(data).map(([key, value]) => wrapItem(value, key))
+      }),
+      methods: {
+        createNewItem() {
+          this.items.push(wrapItem(newItem(), ''));
+        },
+        deleteItem(index) {
+          this.items.splice(index, 1);
+        },
+        unwrapItems() {
+          return this.$data.items.reduce((acc, {key, content}) => ({...acc, [key]: content}), {});
+        }
+      },
+      computed: {
+        idDebugString() {
+          return this.unwrapItems();
+        },
+        encodedData() {
+          return mapFactory(this.unwrapItems()).toDataString();
+        },
+        encodedHuman() {
+          return mapFactory(this.unwrapItems()).toHumanString();
+        }
+      }
+    };
+  }
+
+  Vue.component('unknown-encoded', {
+    template: '<div><string-input v-model="encodedString"/><p>decoded: {{ decodedId }}</p></div>',
+    data: () => ({encodedString: 'Ç/IÒÁIÖêqÉ34uwâêl7Tþ'}),
+    computed: {
+      decodedId() {
+        try {
+          return ID.decodeFromString(this.$data.encodedString).toString();
+        }
+        catch (e) {
+          return `Cannot decode ${this.$data.encodedString}`;
+        }
+      }
+    }
+  });
 
   Vue.component('string-id', createId('string-input', ID.factory.string, 'matt'));
 
@@ -157,10 +219,18 @@
     ['Abby', 'Bao', 'Callum', 'Derek', 'Edgar', 'Farhad', 'Guiseppe'],
     () => ''));
 
+  Vue.component('string-map-id', createIdMap('string-input', ID.factory.string.map,
+    {a: 'one', b: 'two'},
+    () => ''));
+
   Vue.component('boolean-id', createId('boolean-input', ID.factory.boolean, true));
 
   Vue.component('boolean-list-id', createIdList('boolean-input', ID.factory.boolean.list,
     [true, false, true],
+    () => false));
+
+  Vue.component('boolean-map-id', createIdMap('boolean-input', ID.factory.boolean.map,
+    {first: true, second: false},
     () => false));
 
   const app = new Vue({

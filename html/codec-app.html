@@ -22,12 +22,18 @@
     Decode: <unknown-encoded></unknown-encoded>
 
     <p>String: <string-id></string-id></p>
-    <string-list-id></string-list-id>
-    <string-map-id></string-map-id>
+    <p><string-list-id></string-list-id></p>
+    <p><string-map-id></string-map-id></p>
 
     <p>Boolean: <boolean-id></boolean-id></p>
-    <boolean-list-id></boolean-list-id>
-    <boolean-map-id></boolean-map-id>
+    <p><boolean-list-id></boolean-list-id></p>
+    <p><boolean-map-id></boolean-map-id></p>
+
+    <p>Integer: <integer-id></integer-id></p>
+<!--
+    <p><integer-list-id></integer-list-id></p>
+    <p><integer-map-id></integer-map-id></p>
+-->
     <!--
     TODO
     * integer / list / map
@@ -47,6 +53,22 @@
   // these have to be named this way so v-model works on parent components
   const VALUE = 'value';
   const INPUT = 'input';
+
+  function encodeInput(human, factory, inputValue) {
+    if (inputValue === undefined || Number.isNaN(inputValue)) {
+      return '';
+    }
+    try {
+      return human
+        ? factory(inputValue).toHumanString()
+        : factory(inputValue).toDataString();
+    }
+    catch (e) {
+      return e.message;
+    }
+  }
+
+
 
   const baseInputComponent = {
     props: [VALUE],
@@ -70,16 +92,36 @@
     template: '<input type="checkbox" v-bind:checked="valueInput" @input="updateInput($event.target.checked)"/>',
   });
 
+  Vue.component('number-input', {
+    ...baseInputComponent,
+    template: '<input placeholder="enter a numeric value" @keypress="onlyNumber" v-bind:value="valueInput" @input="updateInput(Number.parseFloat($event.target.value.trim()))"/>',
+    methods: {
+      ...baseInputComponent.methods,
+      onlyNumber(event) {
+        const keyCode = event.keyCode || event.which;
+        if ((keyCode < 48 || keyCode > 57) && keyCode !== 45 && keyCode !== 46) {
+          event.preventDefault();
+        }
+      }
+    }
+  });
+
   function createId(inputType, factory, value) {
     return {
-      template: `<div><${inputType} v-model="inputValue"></${inputType}><span> Data: {{ encodedData }}, Human: {{ encodedHuman }}</span></div>`,
+      template: `
+        <div>
+          <${inputType} v-model="inputValue"></${inputType}>
+          <br/>
+          Data: {{ encodedData }}<br/>
+          Human: {{ encodedHuman }}
+        </div>`,
       data: () => ({inputValue: value}),
       computed: {
         encodedData() {
-          return factory(this.$data.inputValue).toDataString();
+          return encodeInput(false, factory, this.$data.inputValue);
         },
         encodedHuman() {
-          return factory(this.$data.inputValue).toHumanString();
+          return encodeInput(true, factory, this.$data.inputValue);
         }
       }
     };
@@ -97,8 +139,23 @@
     };
   }
 
-  function createIdList(inputType, listFactory, data, newItem) {
+  const baseCollectionComponent = {
+    computed: {
+      idDebugString() {
+        return this.unwrapItems();
+      },
+      encodedData() {
+        return encodeInput(false, this.factory, this.unwrapItems());
+      },
+      encodedHuman() {
+        return encodeInput(true, this.factory, this.unwrapItems());
+      }
+    }
+  };
+
+  function createIdList(inputType, factory, data, newItem) {
     return {
+      ...baseCollectionComponent,
       components: {
         SlickList,
         SlickItem
@@ -107,7 +164,9 @@
         <div>
           <SlickList lockAxis="y" :useDragHandle="true" :lockToContainerEdges="true" v-model="items">
             <SlickItem v-for="(item, index) in items" :key="item.id" :index="index">
-              <span v-handle class="handle">≡</span><button @click="deleteItem(index)">-</button><${inputType} v-model="item.content"></${inputType}>{{ item.content }}
+              <span v-handle class="handle">≡</span>
+              <button @click="deleteItem(index)">-</button>
+              <${inputType} v-model="item.content"></${inputType}>
             </SlickItem>
           </SlickList>
           <button @click="createNewItem">Add New Item</button>
@@ -120,6 +179,7 @@
         items: data.map(wrapItem)
       }),
       methods: {
+        factory,
         createNewItem() {
           this.items.push(wrapItem(newItem()));
         },
@@ -129,23 +189,13 @@
         unwrapItems() {
           return this.$data.items.map(item => item.content);
         }
-      },
-      computed: {
-        idDebugString() {
-          return this.unwrapItems();
-        },
-        encodedData() {
-          return listFactory(this.unwrapItems()).toDataString();
-        },
-        encodedHuman() {
-          return listFactory(this.unwrapItems()).toHumanString();
-        }
       }
     };
   }
 
-  function createIdMap(inputType, mapFactory, data, newItem) {
+  function createIdMap(inputType, factory, data, newItem) {
     return {
+      ...baseCollectionComponent,
       template: `
         <div>
           <table>
@@ -174,6 +224,7 @@
         items: Object.entries(data).map(([key, value]) => wrapItem(value, key))
       }),
       methods: {
+        factory,
         createNewItem() {
           this.items.push(wrapItem(newItem(), ''));
         },
@@ -182,17 +233,6 @@
         },
         unwrapItems() {
           return this.$data.items.reduce((acc, {key, content}) => ({...acc, [key]: content}), {});
-        }
-      },
-      computed: {
-        idDebugString() {
-          return this.unwrapItems();
-        },
-        encodedData() {
-          return mapFactory(this.unwrapItems()).toDataString();
-        },
-        encodedHuman() {
-          return mapFactory(this.unwrapItems()).toHumanString();
         }
       }
     };
@@ -232,6 +272,8 @@
   Vue.component('boolean-map-id', createIdMap('boolean-input', ID.factory.boolean.map,
     {first: true, second: false},
     () => false));
+
+  Vue.component('integer-id', createId('number-input', ID.factory.integer));
 
   const app = new Vue({
     el: '#app',

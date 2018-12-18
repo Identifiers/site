@@ -30,13 +30,11 @@
     <p><boolean-map-id></boolean-map-id></p>
 
     <p>Integer: <integer-id></integer-id></p>
-<!--
     <p><integer-list-id></integer-list-id></p>
     <p><integer-map-id></integer-map-id></p>
--->
+
     <!--
     TODO
-    * integer / list / map
     * float / list / map
     * long / list / map
     * bytes / list / map
@@ -59,9 +57,10 @@
       return '';
     }
     try {
+      const id = factory(inputValue);
       return human
-        ? factory(inputValue).toHumanString()
-        : factory(inputValue).toDataString();
+        ? id.toHumanString()
+        : id.toDataString();
     }
     catch (e) {
       return e.message;
@@ -254,26 +253,28 @@
   });
 
   Vue.component('string-id', createId('string-input', ID.factory.string, 'matt'));
-
   Vue.component('string-list-id', createIdList('string-input', ID.factory.string.list,
     ['Abby', 'Bao', 'Callum', 'Derek', 'Edgar', 'Farhad', 'Guiseppe'],
     () => ''));
-
   Vue.component('string-map-id', createIdMap('string-input', ID.factory.string.map,
     {a: 'one', b: 'two'},
     () => ''));
 
   Vue.component('boolean-id', createId('boolean-input', ID.factory.boolean, true));
-
   Vue.component('boolean-list-id', createIdList('boolean-input', ID.factory.boolean.list,
     [true, false, true],
     () => false));
-
   Vue.component('boolean-map-id', createIdMap('boolean-input', ID.factory.boolean.map,
     {first: true, second: false},
     () => false));
 
   Vue.component('integer-id', createId('number-input', ID.factory.integer));
+  Vue.component('integer-list-id', createIdList('number-input', ID.factory.integer.list,
+    [-100, 2, 33],
+    () => 0));
+  Vue.component('integer-map-id', createIdMap('number-input', ID.factory.integer.map,
+    {first: -1000, second: -20000},
+    () => 0));
 
   const app = new Vue({
     el: '#app',

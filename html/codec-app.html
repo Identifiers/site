@@ -33,10 +33,16 @@
     <p><integer-list-id></integer-list-id></p>
     <p><integer-map-id></integer-map-id></p>
 
+    <p>float: <float-id></float-id></p>
+    <p><float-list-id></float-list-id></p>
+    <p><float-map-id></float-map-id></p>
+
+    <p>long: <long-id></long-id></p>
+    <p><long-list-id></long-list-id></p>
+    <p><long-map-id></long-map-id></p>
+
     <!--
     TODO
-    * float / list / map
-    * long / list / map
     * bytes / list / map
     * datetime / list / map
     * uuid / list / map
@@ -274,6 +280,22 @@
     () => 0));
   Vue.component('integer-map-id', createIdMap('number-input', ID.factory.integer.map,
     {first: -1000, second: -20000},
+    () => 0));
+
+  Vue.component('float-id', createId('number-input', ID.factory.float));
+  Vue.component('float-list-id', createIdList('number-input', ID.factory.float.list,
+    [-1.01, 2.224, 33.12],
+    () => 0));
+  Vue.component('float-map-id', createIdMap('number-input', ID.factory.float.map,
+    {first: -1000.99, second: 0.020004},
+    () => 0));
+
+  Vue.component('long-id', createId('number-input', ID.factory.long));
+  Vue.component('long-list-id', createIdList('number-input', ID.factory.long.list,
+    [-100, 222997875743, 33],
+    () => 0));
+  Vue.component('long-map-id', createIdMap('number-input', ID.factory.long.map,
+    {first: 10005768454764, second: -224845843},
     () => 0));
 
   const app = new Vue({

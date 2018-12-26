@@ -21,6 +21,7 @@
 
   <div id="app">
     Decode: <unknown-encoded></unknown-encoded>
+
     <p>String: <string-id></string-id></p>
     <p><string-list-id></string-list-id></p>
     <p><string-map-id></string-map-id></p>
@@ -44,6 +45,10 @@
     <p>datetime: <datetime-id></datetime-id></p>
     <p><datetime-list-id></datetime-list-id></p>
     <p><datetime-map-id></datetime-map-id></p>
+
+    <p>uuid: <uuid-id></uuid-id></p>
+    <!--<p><uuid-list-id></uuid-list-id></p>-->
+    <!--<p><uuid-map-id></uuid-map-id></p>-->
 
     <!--
     TODO
@@ -115,6 +120,23 @@
     }
   });
 
+  Vue.component('uuid-input', {
+    ...baseInputComponent,
+    template: `
+      <div>
+        <input placeholder="enter a UUID" v-bind:value="valueInput" @input="updateInput($event.target.value.trim())"/>
+        <button @click="generateUUIDValue">UUIDv4</button>
+      </div>`,
+      methods: {
+        ...baseInputComponent.methods,
+        generateUUIDValue() {
+          const uuid = generateUUID();
+          this.valueInput = uuid;
+          this.updateInput(uuid);
+        }
+      }
+  });
+
   Vue.component('datetime-picker', window['vue-ctk-date-time-picker']);
   Vue.component('datetime-input', {
     ...baseInputComponent,
@@ -127,17 +149,17 @@
         <div>
           <${inputType} v-model="inputValue"></${inputType}>
           <br/>
-          Value: {{ this.$data.inputValue }}<br/>
+          Value: {{ inputValue }}<br/>
           Data: {{ encodedData }}<br/>
           Human: {{ encodedHuman }}
         </div>`,
       data: () => ({inputValue: value}),
       computed: {
         encodedData() {
-          return encodeInput(false, factory, this.$data.inputValue);
+          return encodeInput(false, factory, this.inputValue);
         },
         encodedHuman() {
-          return encodeInput(true, factory, this.$data.inputValue);
+          return encodeInput(true, factory, this.inputValue);
         }
       }
     };
@@ -203,7 +225,7 @@
           this.items.splice(index, 1);
         },
         unwrapItems() {
-          return this.$data.items.map(item => item.content);
+          return this.items.map(item => item.content);
         }
       }
     };
@@ -248,7 +270,7 @@
           this.items.splice(index, 1);
         },
         unwrapItems() {
-          return this.$data.items.reduce((acc, {key, content}) => ({...acc, [key]: content}), {});
+          return this.items.reduce((acc, {key, content}) => ({...acc, [key]: content}), {});
         }
       }
     };
@@ -260,10 +282,10 @@
     computed: {
       decodedId() {
         try {
-          return ID.decodeFromString(this.$data.encodedString).toString();
+          return ID.decodeFromString(this.encodedString).toString();
         }
         catch (e) {
-          return `Cannot decode ${this.$data.encodedString}`;
+          return `Cannot decode "${this.encodedString}"`;
         }
       }
     }
@@ -322,6 +344,20 @@
       Object.entries(formattedStringMap).reduce((acc, [key, value]) => ({...acc, [key]: new Date(value)}), {})),
     {end: epochToISOString(10005768454764), start: epochToISOString(-224845843)},
     () => epochToISOString(Date.now())));
+
+  const hex = [];
+  for (let i = 0; i < 256; i++) {
+    hex[i] = (i < 16 ? '0' : '') + (i).toString(16);
+  }
+  function generateUUID() {
+    const r = crypto.getRandomValues(new Uint8Array(16));
+    r[6] = r[6] & 0x0f | 0x40;
+    r[8] = r[8] & 0x3f | 0x80;
+    const h = Array.from(r).map(i => hex[i]);
+    return `${h[0]}${h[1]}${h[2]}${h[3]}-${h[4]}${h[5]}-${h[6]}${h[7]}-${h[8]}${h[9]}-${h[10]}${h[11]}${h[12]}${h[13]}${h[14]}${h[15]}`;
+  }
+  Vue.component('uuid-id', createId('uuid-input', ID.factory.uuid));
+
 
   const app = new Vue({
     el: '#app'

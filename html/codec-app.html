@@ -14,6 +14,7 @@
 
   <script src="https://unpkg.com/vue-slicksort@latest/dist/vue-slicksort.umd.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue-ctk-date-time-picker@latest/dist/vue-ctk-date-time-picker.umd.js"></script>
+  <script src="https://unpkg.com/vue-the-mask@latest/dist/vue-the-mask.js"></script>
 
   <script src="https://unpkg.com/identifiers-js/dist/identifiers.bundle.js"></script>
 
@@ -47,14 +48,13 @@
     <p><datetime-map-id></datetime-map-id></p>
 
     <p>uuid: <uuid-id></uuid-id></p>
-    <!--<p><uuid-list-id></uuid-list-id></p>-->
-    <!--<p><uuid-map-id></uuid-map-id></p>-->
+    <p><uuid-list-id></uuid-list-id></p>
+    <p><uuid-map-id></uuid-map-id></p>
 
     <!--
     TODO
     * bytes / list / map ?? hard to do
         nice hex editor component for byte: https://github.com/michbil/hex-works
-    * uuid / list / map
     * geo / list / map
     * composite list / map
     -->
@@ -120,13 +120,26 @@
     }
   });
 
+  Vue.component('the-mask', window['the-mask']);
   Vue.component('uuid-input', {
     ...baseInputComponent,
     template: `
       <div>
-        <input placeholder="enter a UUID" v-bind:value="valueInput" @input="updateInput($event.target.value.trim())"/>
+        <the-mask placeholder="enter a UUID" mask="hhhhhhhh-hhhh-hhhh-hhhh-hhhhhhhhhhhh" :tokens="hexTokens" :masked="true"
+          v-model="valueInput" @input="updateInput($event)"></the-mask>
         <button @click="generateUUIDValue">UUIDv4</button>
       </div>`,
+      data() {
+        return {
+          valueInput: this[VALUE],
+          hexTokens: {
+            h: {
+              pattern: /[0-9a-fA-F]/,
+              transform: v => v.toLocaleLowerCase()
+            }
+          }
+        }
+      },
       methods: {
         ...baseInputComponent.methods,
         generateUUIDValue() {
@@ -167,7 +180,6 @@
 
   const {HandleDirective, SlickList, SlickItem} = window.VueSlicksort;
   Vue.directive('handle', HandleDirective);
-
 
   function wrapItem(content, key) {
     return {
@@ -357,7 +369,12 @@
     return `${h[0]}${h[1]}${h[2]}${h[3]}-${h[4]}${h[5]}-${h[6]}${h[7]}-${h[8]}${h[9]}-${h[10]}${h[11]}${h[12]}${h[13]}${h[14]}${h[15]}`;
   }
   Vue.component('uuid-id', createId('uuid-input', ID.factory.uuid));
-
+  Vue.component('uuid-list-id', createIdList('uuid-input', ID.factory.uuid.list,
+    [generateUUID(), generateUUID(), generateUUID()],
+    generateUUID));
+  Vue.component('uuid-map-id', createIdMap('uuid-input', ID.factory.uuid.map,
+    {first: generateUUID(), second: generateUUID()},
+    generateUUID));
 
   const app = new Vue({
     el: '#app'

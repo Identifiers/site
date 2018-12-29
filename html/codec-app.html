@@ -52,16 +52,13 @@
     <p><uuid-map-id></uuid-map-id></p>
 
     <p>geo: <geo-id></geo-id></p>
-<!--
     <p><geo-list-id></geo-list-id></p>
     <p><geo-map-id></geo-map-id></p>
--->
 
     <!--
     TODO
     * bytes / list / map ?? hard to do
         nice hex editor component for byte: https://github.com/michbil/hex-works
-    * geo / list / map
     * composite list / map
     -->
   </div>
@@ -403,6 +400,12 @@
     generateUUID));
 
   Vue.component('geo-id', createId('geo-input', ID.factory.geo, {latitude: 10, longitude: 20}));
+  Vue.component('geo-list-id', createIdList('geo-input', ID.factory.geo.list,
+    [{latitude: 45, longitude: -15}],
+    () => ({latitude: 0, longitude: 0})));
+  Vue.component('geo-map-id', createIdMap('geo-input', ID.factory.geo.map,
+    {first: {latitude: -60, longitude: -70}, second: {latitude: 60, longitude: 70}},
+    () => ({latitude: 0, longitude: 0})));
 
   const app = new Vue({
     el: '#app'

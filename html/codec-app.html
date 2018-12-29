@@ -51,6 +51,12 @@
     <p><uuid-list-id></uuid-list-id></p>
     <p><uuid-map-id></uuid-map-id></p>
 
+    <p>geo: <geo-id></geo-id></p>
+<!--
+    <p><geo-list-id></geo-list-id></p>
+    <p><geo-map-id></geo-map-id></p>
+-->
+
     <!--
     TODO
     * bytes / list / map ?? hard to do
@@ -92,9 +98,16 @@
     methods: {
       updateInput(value) {
         this.$emit(INPUT, value);
+      },
+      onlyNumber(event) {
+        const keyCode = event.keyCode || event.which;
+        if ((keyCode < 48 || keyCode > 57) && keyCode !== 45 && keyCode !== 46) {
+          event.preventDefault();
+        }
       }
     }
   };
+
 
   Vue.component('string-input', {
     ...baseInputComponent,
@@ -108,16 +121,7 @@
 
   Vue.component('number-input', {
     ...baseInputComponent,
-    template: '<input placeholder="enter a numeric value" @keypress="onlyNumber" v-bind:value="valueInput" @input="updateInput(Number.parseFloat($event.target.value.trim()))"/>',
-    methods: {
-      ...baseInputComponent.methods,
-      onlyNumber(event) {
-        const keyCode = event.keyCode || event.which;
-        if ((keyCode < 48 || keyCode > 57) && keyCode !== 45 && keyCode !== 46) {
-          event.preventDefault();
-        }
-      }
-    }
+    template: '<input placeholder="enter a numeric value" @keypress="onlyNumber" v-bind:value="valueInput" @input="updateInput(Number.parseFloat($event.target.value))"/>'
   });
 
   Vue.component('the-mask', window['the-mask']);
@@ -154,6 +158,28 @@
   Vue.component('datetime-input', {
     ...baseInputComponent,
     template: `<datetime-picker v-model="valueInput" @input="updateInput($event)"></datetime-picker>`
+  });
+
+  //how do I turn two fields into a single object value? Maybe bind
+  Vue.component('geo-input', {
+    ...baseInputComponent,
+    template: `
+      <div>
+        <input placeholder="enter a Latitude" @keypress="onlyNumber" v-model.number="valueInput.latitude" ></input>°N
+        <input placeholder="enter a Longitude" @keypress="onlyNumber" v-model.number="valueInput.longitude"></input>°E
+        <button @click="determineGeolocation">Current Location</button>
+      </div>
+    `,
+    methods: {
+      ...baseInputComponent.methods,
+      determineGeolocation() {
+        window.navigator.geolocation.getCurrentPosition((position) => {
+          const newGeo = {latitude: position.coords.latitude, longitude: position.coords.longitude};
+          this.valueInput.latitude = newGeo.latitude;
+          this.valueInput.longitude = newGeo.longitude;
+        });
+      }
+    }
   });
 
   function createId(inputType, factory, value) {
@@ -375,6 +401,8 @@
   Vue.component('uuid-map-id', createIdMap('uuid-input', ID.factory.uuid.map,
     {first: generateUUID(), second: generateUUID()},
     generateUUID));
+
+  Vue.component('geo-id', createId('geo-input', ID.factory.geo, {latitude: 10, longitude: 20}));
 
   const app = new Vue({
     el: '#app'

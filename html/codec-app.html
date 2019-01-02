@@ -121,7 +121,7 @@
     template: '<input placeholder="enter a numeric value" @keypress="onlyNumber" v-bind:value="valueInput" @input="updateInput(Number.parseFloat($event.target.value))"/>'
   });
 
-  Vue.component('the-mask', window['the-mask']);
+  Vue.component('the-mask', window.VueTheMask);
   Vue.component('uuid-input', {
     ...baseInputComponent,
     template: `

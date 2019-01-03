@@ -16,6 +16,6 @@
   },
   "homepage": "https://github.com/Identifiers/site#readme",
   "dependencies": {
-    "vue.js": "0.3.2"
+    "vue": "2.5.21"
   }
 }

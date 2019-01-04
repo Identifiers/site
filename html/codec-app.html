@@ -84,8 +84,7 @@
     -->
   </div>
 
-<script lang="javascript">
-
+<script>
   Vue.use(window.VueTabs);
 
   // these have to be named this way so v-model works on parent components
@@ -192,7 +191,6 @@
     methods: {
       ...baseInputComponent.methods,
       determineGeolocation() {
-        // todo get a cert for identifiers.io so this will work (needs https)
         window.navigator.geolocation.getCurrentPosition((position) => {
           const newGeo = {latitude: position.coords.latitude, longitude: position.coords.longitude};
           this.valueInput.latitude = newGeo.latitude;
@@ -403,16 +401,17 @@
     {end: epochToISOString(10005768454764), start: epochToISOString(-224845843)},
     () => epochToISOString(Date.now())));
 
-  const hex = [];
-  for (let i = 0; i < 256; i++) {
-    hex[i] = (i < 16 ? '0' : '') + (i).toString(16);
-  }
   function generateUUID() {
     const r = crypto.getRandomValues(new Uint8Array(16));
-    r[6] = r[6] & 0x0f | 0x40; // todo wordpress entitizes '&'. find another way to create or what is this exactly?
+    r[6] = r[6] & 0x0f | 0x40;
     r[8] = r[8] & 0x3f | 0x80;
     const h = Array.from(r).map(i => hex[i]);
     return `${h[0]}${h[1]}${h[2]}${h[3]}-${h[4]}${h[5]}-${h[6]}${h[7]}-${h[8]}${h[9]}-${h[10]}${h[11]}${h[12]}${h[13]}${h[14]}${h[15]}`;
+  }
+  <!-- Gutenberg bug--hex defined after generateUUID() because it entitizes '&' if defined before: -->
+  const hex = [];
+  for (let i = 0; i < 256; i++) {
+    hex[i] = (i < 16 ? '0' : '') + (i).toString(16);
   }
   Vue.component('uuid-id', createId('uuid-input', ID.factory.uuid));
   Vue.component('uuid-list-id', createIdList('uuid-input', ID.factory.uuid.list,

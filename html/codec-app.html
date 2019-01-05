@@ -178,7 +178,6 @@
     template: `<datetime-picker v-model="valueInput" @input="updateInput($event)"></datetime-picker>`
   });
 
-  //how do I turn two fields into a single object value? Maybe bind
   Vue.component('geo-input', {
     ...baseInputComponent,
     template: `
@@ -408,7 +407,10 @@
     const h = Array.from(r).map(i => hex[i]);
     return `${h[0]}${h[1]}${h[2]}${h[3]}-${h[4]}${h[5]}-${h[6]}${h[7]}-${h[8]}${h[9]}-${h[10]}${h[11]}${h[12]}${h[13]}${h[14]}${h[15]}`;
   }
-  <!-- Gutenberg bug--hex defined after generateUUID() because it entitizes '&' if defined before: -->
+  /*
+    Gutenberg bug; hex defined after generateUUID() because it entitizes '&' if defined before:
+    https://github.com/WordPress/gutenberg/issues/13186
+  */
   const hex = [];
   for (let i = 0; i < 256; i++) {
     hex[i] = (i < 16 ? '0' : '') + (i).toString(16);

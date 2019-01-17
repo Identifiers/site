@@ -16,8 +16,6 @@
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/vue-ctk-date-time-picker@latest/dist/vue-ctk-date-time-picker.css">
   <script src="https://cdn.jsdelivr.net/npm/vue-ctk-date-time-picker@latest/dist/vue-ctk-date-time-picker.umd.js"></script>
   <script src="https://unpkg.com/vue-the-mask@latest/dist/vue-the-mask.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/vue-nav-tabs/themes/vue-tabs.css">
-  <script src="https://unpkg.com/vue-nav-tabs/dist/vue-tabs.js"></script>
 
   <script src="https://unpkg.com/identifiers-js/dist/identifiers.bundle.js"></script>
 
@@ -26,55 +24,64 @@
     Decode:
     <unknown-encoded></unknown-encoded>
 
-    <vue-tabs>
-      <v-tab title="String">
-        <div><string-id></string-id></div>
-        <div><string-list-id></string-list-id></div>
-        <div><string-map-id></string-map-id></div>
-      </v-tab>
+    <select name="id-type" v-model="selectedType">
+      <option value="string">String</option>
+      <option value="boolean">Boolean</option>
+      <option value="integer">Integer</option>
+      <option value="float">Float</option>
+      <option value="long">Long</option>
+      <option value="datetime">Datetime</option>
+      <option value="uuid">UUID</option>
+      <option value="geo">Geo</option>
+    </select>
 
-      <v-tab title="Boolean">
-        <div><boolean-id></boolean-id></div>
-        <div><boolean-list-id></boolean-list-id></div>
-        <div><boolean-map-id></boolean-map-id></div>
-      </v-tab>
+    <div v-show="selectedType === 'string'">
+      <div><string-id></string-id></div>
+      <div><string-list-id></string-list-id></div>
+      <div><string-map-id></string-map-id></div>
+    </div>
 
-      <v-tab title="Integer">
-        <div><integer-id></integer-id></div>
-        <div><integer-list-id></integer-list-id></div>
-        <div><integer-map-id></integer-map-id></div>
-      </v-tab>
+    <div v-show="selectedType === 'boolean'">
+      <div><boolean-id></boolean-id></div>
+      <div><boolean-list-id></boolean-list-id></div>
+      <div><boolean-map-id></boolean-map-id></div>
+    </div>
 
-      <v-tab title="Float">
-        <div><float-id></float-id></div>
-        <div><float-list-id></float-list-id></div>
-        <div><float-map-id></float-map-id></div>
-      </v-tab>
+    <div v-show="selectedType === 'integer'">
+      <div><integer-id></integer-id></div>
+      <div><integer-list-id></integer-list-id></div>
+      <div><integer-map-id></integer-map-id></div>
+    </div>
 
-      <v-tab title="Long">
-        <div><long-id></long-id></div>
-        <div><long-list-id></long-list-id></div>
-        <div><long-map-id></long-map-id></div>
-      </v-tab>
+    <div v-show="selectedType === 'float'">
+      <div><float-id></float-id></div>
+      <div><float-list-id></float-list-id></div>
+      <div><float-map-id></float-map-id></div>
+    </div>
 
-      <v-tab title="Datetime">
-        <div><datetime-id></datetime-id></div>
-        <div><datetime-list-id></datetime-list-id></div>
-        <div><datetime-map-id></datetime-map-id></div>
-      </v-tab>
+    <div v-show="selectedType === 'long'">
+      <div><long-id></long-id></div>
+      <div><long-list-id></long-list-id></div>
+      <div><long-map-id></long-map-id></div>
+    </div>
 
-      <v-tab title="UUID">
-        <div><uuid-id></uuid-id></div>
-        <div><uuid-list-id></uuid-list-id></div>
-        <div><uuid-map-id></uuid-map-id></div>
-      </v-tab>
+    <div v-show="selectedType === 'datetime'">
+      <div><datetime-id></datetime-id></div>
+      <div><datetime-list-id></datetime-list-id></div>
+      <div><datetime-map-id></datetime-map-id></div>
+    </div>
 
-      <v-tab title="Geo">
-        <div><geo-id></geo-id></div>
-        <div><geo-list-id></geo-list-id></div>
-        <div><geo-map-id></geo-map-id></div>
-      </v-tab>
-    </vue-tabs>
+    <div v-show="selectedType === 'uuid'">
+      <div><uuid-id></uuid-id></div>
+      <div><uuid-list-id></uuid-list-id></div>
+      <div><uuid-map-id></uuid-map-id></div>
+    </div>
+
+    <div v-show="selectedType === 'geo'">
+      <div><geo-id></geo-id></div>
+      <div><geo-list-id></geo-list-id></div>
+      <div><geo-map-id></geo-map-id></div>
+    </div>
 
     <!--
     TODO
@@ -85,8 +92,6 @@
   </div>
 
 <script>
-  Vue.use(window.VueTabs);
-
   // these have to be named this way so v-model works on parent components
   const VALUE = 'value';
   const INPUT = 'input';
@@ -255,6 +260,7 @@
       },
       template: `
         <div>
+          <h3>List</h3>
           <SlickList lockAxis="y" :useDragHandle="true" :lockToContainerEdges="true" v-model="items">
             <SlickItem v-for="(item, index) in items" :key="item.id" :index="index">
               <span v-handle class="handle">≡</span>
@@ -291,6 +297,7 @@
       ...baseCollectionComponent,
       template: `
         <div>
+          <h3>Map</h3>
           <table>
             <thead>
               <tr>
@@ -431,8 +438,13 @@
     {first: {latitude: -60, longitude: -70}, second: {latitude: 60, longitude: 70}},
     () => ({latitude: 0, longitude: 0})));
 
+  const sharedData = {
+    selectedType: "string"
+  };
+
   const app = new Vue({
-    el: '#app'
+    el: '#app',
+    data: sharedData
   });
 </script>
 </body>

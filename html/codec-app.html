@@ -206,6 +206,15 @@
     }
   });
 
+  Vue.component('encoded-output', {
+    props: ['encoded'],
+    template: `
+      <table>
+        <tr><td>Data:</td><code>{{ encoded.data }}</code><td></td></tr>
+        <tr><td>Human:</td><code>{{ encoded.human }}</code><td></td></tr>
+      </table>`
+  });
+
   function createId(inputType, factory, value) {
     return {
       template: `
@@ -213,19 +222,15 @@
           <hr/>
           <h4>Single</h4>
           <${inputType} v-model="inputValue"></${inputType}>
-          <br/>
-          <table>
-            <tr><td>Data:</td><code>{{ encodedData }}</code><td></td></tr>
-            <tr><td>Human:</td><code>{{ encodedHuman }}</code><td></td></tr>
-          </table>
+          <encoded-output v-bind:encoded="encodeOutput"></encoded-output>
         </div>`,
       data: () => ({inputValue: value}),
       computed: {
-        encodedData() {
-          return encodeInput(false, factory, this.inputValue);
-        },
-        encodedHuman() {
-          return encodeInput(true, factory, this.inputValue);
+        encodeOutput() {
+          return {
+            data: encodeInput(false, factory, this.inputValue),
+            human: encodeInput(true, factory, this.inputValue)
+          }
         }
       }
     };
@@ -244,11 +249,11 @@
 
   const baseCollectionComponent = {
     computed: {
-      encodedData() {
-        return encodeInput(false, this.factory, this.unwrapItems());
-      },
-      encodedHuman() {
-        return encodeInput(true, this.factory, this.unwrapItems());
+      encodeOutput() {
+        return {
+          data: encodeInput(false, this.factory, this.unwrapItems()),
+          human: encodeInput(true, this.factory, this.unwrapItems())
+        }
       }
     }
   };
@@ -274,11 +279,7 @@
             </SlickItem>
           </SlickList>
           <button @click="createNewItem">Add New Item</button>
-          <br/>
-          <table>
-            <tr><td>Data:</td><code>{{ encodedData }}</code><td></td></tr>
-            <tr><td>Human:</td><code>{{ encodedHuman }}</code><td></td></tr>
-          </table>
+          <encoded-output v-bind:encoded="this.encodeOutput"></encoded-output>
         </div>`,
       data: () => ({
         items: data.map(wrapItem)
@@ -322,11 +323,7 @@
             </tbody>
           </table>
           <button @click="createNewItem">Add New Mapping</button>
-          <br/>
-          <table>
-            <tr><td>Data:</td><code>{{ encodedData }}</code><td></td></tr>
-            <tr><td>Human:</td><code>{{ encodedHuman }}</code><td></td></tr>
-          </table>
+          <encoded-output v-bind:encoded="this.encodeOutput"></encoded-output>
         </div>`,
       data: () => ({
         items: Object.entries(data).map(([key, value]) => wrapItem(value, key))

@@ -214,9 +214,10 @@
           <h4>Single</h4>
           <${inputType} v-model="inputValue"></${inputType}>
           <br/>
-          Value: {{ inputValue }}<br/>
-          Data: {{ encodedData }}<br/>
-          Human: {{ encodedHuman }}
+          <table>
+            <tr><td>Data:</td><code>{{ encodedData }}</code><td></td></tr>
+            <tr><td>Human:</td><code>{{ encodedHuman }}</code><td></td></tr>
+          </table>
         </div>`,
       data: () => ({inputValue: value}),
       computed: {
@@ -243,9 +244,6 @@
 
   const baseCollectionComponent = {
     computed: {
-      idDebugString() {
-        return this.unwrapItems();
-      },
       encodedData() {
         return encodeInput(false, this.factory, this.unwrapItems());
       },
@@ -277,9 +275,10 @@
           </SlickList>
           <button @click="createNewItem">Add New Item</button>
           <br/>
-          List: {{ idDebugString }}<br/>
-          Data: {{ encodedData }}<br/>
-          Human: {{ encodedHuman }}
+          <table>
+            <tr><td>Data:</td><code>{{ encodedData }}</code><td></td></tr>
+            <tr><td>Human:</td><code>{{ encodedHuman }}</code><td></td></tr>
+          </table>
         </div>`,
       data: () => ({
         items: data.map(wrapItem)
@@ -324,9 +323,10 @@
           </table>
           <button @click="createNewItem">Add New Mapping</button>
           <br/>
-          Map: {{ idDebugString }}<br/>
-          Data: {{ encodedData }}<br/>
-          Human: {{ encodedHuman }}
+          <table>
+            <tr><td>Data:</td><code>{{ encodedData }}</code><td></td></tr>
+            <tr><td>Human:</td><code>{{ encodedHuman }}</code><td></td></tr>
+          </table>
         </div>`,
       data: () => ({
         items: Object.entries(data).map(([key, value]) => wrapItem(value, key))

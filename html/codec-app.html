@@ -189,7 +189,9 @@
       <div>
         <input placeholder="enter a Latitude" @keypress="onlyNumber" v-model.number="valueInput.latitude" ></input>°N
         <input placeholder="enter a Longitude" @keypress="onlyNumber" v-model.number="valueInput.longitude"></input>°E
-        <button @click="determineGeolocation">Current Location</button>
+        <button @click="determineGeolocation">
+          <img width="24" height="24" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAANuSURBVGhD7ZlHixRBGEDHHEE9GC9mEQ968SbmgBjQg+Fi+AEiYsQfYI4XBcWTCcGAonhQD+YARrwYEbMnEwZUMLxXPQ2rTs+Oa/fsLMyDx35V01XTM1Phq95clSpVUqUVTsYNuBfP5t2D63EStsSKozfuxI/4GvfjRlyY1/gAvkGv8dqeWO+0wE34FY/iSGyKMX3zxvjaaDyOtlmH9lEvdMaLeBeHWZFnHB6JwtxcnBOFoW5sFAZG4H28gJ2sKCcd8TGewPZWwHXsgo0xrquJdb7WFS9bAR3wJD5C+ywLzfESevMOiR4ovfJ/SyG+tjs2w1PoL2HfmeOEvIft0Il4HuuKN+0XYF8P0NUrU/zmnHxDQyldXAC+YPyLZsIuPBaFuSv4L8MmCfu4EYVhdfI9MsFN6gP6TYmrUDGcsP3yGhcj7ssl1vfIZLNzh3WTcuKOxyaYxEx8hj/zPsUZmIR9TUAn9FuciKljKuBuKofQiVcIb9SxvBRdMtXYuulYCPs6GIXhrxtc6uxDV6BiOFSeozf8J8vxCdY2nNzZzaNS5zQuQsf0bCsKYNrgkPFb/xPrfK1PKP2Nu7Z9+x6+V+qcQTv3JmdZUYBiH6AbFvsAphy2X4yZfAB/1i1RmIjDw8m7LJR+Jx5CjUIpma24OwrTZT7eisKQmCVNYieqE9YP4beu3rx107AQ9nU4CnO3cV4Upkt//IEOgTFYbBl1JXLpdMiocdIKJPblHuAc+I41U/BUuYmro7BWHE7eiNY2bGLW4LkozIYF+BJrHlrSwj5fYXx+yARzerf6qaGULvb5DluHUoZsxvhAkiYmh/adOZ66PmOa+Yp9fcLaEsTUMC+6iqVOzmLYxzW0z7LhIdzHI2ao/8sUdF6V7UwcsxLvoClwXbGtfawIpTLTFl+guUtdsa3Zq33VC2aQHkDq8vPb5j0mJYZlwQnokrojlP4N29g2jYXgvxiM33BIKJWG19rGthWBpygnYynPOb3Ga21TMbTBh1jKauI1XmubimIU+tBrYCgVZhB6TfxopuLYju7Qhc4K1rnjbgulCsWTlUfKJaH0O57QfC3pJFcxmJiZ7A0IpQhj63x41SDw+aanNx+Xq3FmzzyzwIOP/wBZiz5lMy70T4+KZji64qhxg2QVmrU2WDyoZ/EAoEqVdMjlfgF3k6BtPQA4VQAAAABJRU5ErkJggg==">
+        </button>
       </div>
     `,
     methods: {
@@ -208,7 +210,8 @@
     return {
       template: `
         <div>
-          <h3>Single</h3>
+          <hr/>
+          <h4>Single</h4>
           <${inputType} v-model="inputValue"></${inputType}>
           <br/>
           Value: {{ inputValue }}<br/>
@@ -261,10 +264,13 @@
       },
       template: `
         <div>
-          <h3>List</h3>
+          <hr/>
+          <h4>List</h4>
           <SlickList lockAxis="y" :useDragHandle="true" :lockToContainerEdges="true" v-model="items">
             <SlickItem v-for="(item, index) in items" :key="item.id" :index="index">
-              <span v-handle class="handle">≡</span>
+              <span v-handle class="handle">
+              <img width="24" height="24" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFbSURBVGhD7Zm7SgRBEEU70ESMfIB+gAamgpiIIOgXGPrIBM0MfGSCfoWxot9hbiD6K8bqPU4XLM0EdtC73U4dOGxRU8veYqB3mQ2OUzc30SYh+Ge0uSUs/Fa0qSVGwxvNLEHAL3ku1xPpca3aJQj2/UervxOO8x9YlOlJMinJks2p7DtBJiFZhse0tFu3HF9no2A9ZqZk6fls9uRjV4YPuSSv5VWs3yU8SWZLzzvOuFmTJ5VIlmz25WslkmV4zMuNrgy7krN4JUpNDzblnCw9nw1vvO3K8CwX5LE8ijXnM9xJZkvPO8642Zb3lUiWbJpfoHlW5WFX/v7E5Xf6TpSaHnD0MVt6Phu+UA66MlzK9AMuJHBu2xdQyXnHcQpzJvvO8D6ZrQ4ef7xJ/gN4kGloelxjxh6nVIct8SJnaESo6VUd3kiXaCq8MbpEc+ENW6LJ8AbBmw3vDIAQfgA6lt89JM7OOgAAAABJRU5ErkJggg==">
+              </span>
               <button @click="deleteItem(index)">-</button>
               <${inputType} v-model="item.content"></${inputType}>
             </SlickItem>
@@ -298,7 +304,8 @@
       ...baseCollectionComponent,
       template: `
         <div>
-          <h3>Map</h3>
+          <hr/>
+          <h4>Map</h4>
           <table>
             <thead>
               <tr>

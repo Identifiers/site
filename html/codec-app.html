@@ -190,7 +190,7 @@
         <input placeholder="enter a Latitude" @keypress="onlyNumber" v-model.number="valueInput.latitude" ></input>°N
         <input placeholder="enter a Longitude" @keypress="onlyNumber" v-model.number="valueInput.longitude"></input>°E
         <button @click="determineGeolocation">
-          <img width="24" height="24" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAANuSURBVGhD7ZlHixRBGEDHHEE9GC9mEQ968SbmgBjQg+Fi+AEiYsQfYI4XBcWTCcGAonhQD+YARrwYEbMnEwZUMLxXPQ2rTs+Oa/fsLMyDx35V01XTM1Phq95clSpVUqUVTsYNuBfP5t2D63EStsSKozfuxI/4GvfjRlyY1/gAvkGv8dqeWO+0wE34FY/iSGyKMX3zxvjaaDyOtlmH9lEvdMaLeBeHWZFnHB6JwtxcnBOFoW5sFAZG4H28gJ2sKCcd8TGewPZWwHXsgo0xrquJdb7WFS9bAR3wJD5C+ywLzfESevMOiR4ovfJ/SyG+tjs2w1PoL2HfmeOEvIft0Il4HuuKN+0XYF8P0NUrU/zmnHxDQyldXAC+YPyLZsIuPBaFuSv4L8MmCfu4EYVhdfI9MsFN6gP6TYmrUDGcsP3yGhcj7ssl1vfIZLNzh3WTcuKOxyaYxEx8hj/zPsUZmIR9TUAn9FuciKljKuBuKofQiVcIb9SxvBRdMtXYuulYCPs6GIXhrxtc6uxDV6BiOFSeozf8J8vxCdY2nNzZzaNS5zQuQsf0bCsKYNrgkPFb/xPrfK1PKP2Nu7Z9+x6+V+qcQTv3JmdZUYBiH6AbFvsAphy2X4yZfAB/1i1RmIjDw8m7LJR+Jx5CjUIpma24OwrTZT7eisKQmCVNYieqE9YP4beu3rx107AQ9nU4CnO3cV4Upkt//IEOgTFYbBl1JXLpdMiocdIKJPblHuAc+I41U/BUuYmro7BWHE7eiNY2bGLW4LkozIYF+BJrHlrSwj5fYXx+yARzerf6qaGULvb5DluHUoZsxvhAkiYmh/adOZ66PmOa+Yp9fcLaEsTUMC+6iqVOzmLYxzW0z7LhIdzHI2ao/8sUdF6V7UwcsxLvoClwXbGtfawIpTLTFl+guUtdsa3Zq33VC2aQHkDq8vPb5j0mJYZlwQnokrojlP4N29g2jYXgvxiM33BIKJWG19rGthWBpygnYynPOb3Ga21TMbTBh1jKauI1XmubimIU+tBrYCgVZhB6TfxopuLYju7Qhc4K1rnjbgulCsWTlUfKJaH0O57QfC3pJFcxmJiZ7A0IpQhj63x41SDw+aanNx+Xq3FmzzyzwIOP/wBZiz5lMy70T4+KZji64qhxg2QVmrU2WDyoZ/EAoEqVdMjlfgF3k6BtPQA4VQAAAABJRU5ErkJggg==">
+          <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMGSURBVGhD7ZnLq01RHICPZ96vkpGSAXMi8srIa+CZTJTHnyCKEeVSiLz+AnkMSCITioHwDyBG3q+JSHmG76vzq9Xtau97ztrn7lvnq6+7W3ut32/tffZae+11G1261IdhuASP4QP8gD+bemzZUVyM1q0No3E32sm/JbXuLrTtgLIJX2BfnSyjbddhxxmCB/EPph16jidxBc7GsU09Xomn8SWmbYyxH43ZEUx0AdNOeCe341Aswud/B77CNMY57MhFeOfTxJfRu9xfxuFVTGP5S1TKRkwfm+PYzl2z7QmMeMZej5UwCtPn9wrm+MmNkf4SjiNzZWcPRhIvZAzmwkfwNUZ8p9isOPDeYyTYhrnZiRHfXGUmhNL4ho3g3v0q3qTGTB/RRZgNlwcR2Hm+KnxPRB6XHdm4jxHYF1IRI/EIvml6uFlWxBqMPPcsyMVHjMCzLCjADkf90LIijB31XS9l4wdG4PEWFPAWo37oL1GEsaP+dwty8RUj8AQLCmj1Aowd9c2ZjWcYgedZUEBfj1APFjEfo/5TC3JxESPwXgsKcMAewhjEHpcZxPsw8py3IBeuHiPwY6xi1WjMJxh5zJmNKeigiuDLMDfLMeJ/w8mYlfQx8jg3VcdvLMBI4LQ6A3NhrHSqNlcl3MVIknOQGSvi3rGgKhZifND4dw62y1xMY5qjUvyQibt1y4I2uY0Rz9iV4w7DL4yka7FVNmDEMWaZdVYWzmIkdnehzPqoN7ZJv8LOYMdwjn6HkfwU9hfbRHu/wCZhR9mM0YHfWGaNFLjmsU2034IDwg2MTjzCMnud1rFutLuJA8Z0/IzRGT8Ji0g/G79gzhdiS2zF6JDz+Cr8H56LOV+r2N1oiXSv1ME9FXszDdOtmUtYG5xB3FGLzl3DdMnt8XWM89bNvtpsF/eO0pkl3V3zHyBRbp2lWEvSnWs76hpf0wuzTm0ZgQ8xOut2TLol47nhWGtm4ieMToeWeW5Q4A5bOl16vBoHFQcwLsDjQYe7zS41tIrd7I4wsWmXLvWk0fgH19ZAEofE5EAAAAAASUVORK5CYII=">
         </button>
       </div>
     `,
@@ -210,9 +210,38 @@
     props: ['encoded'],
     template: `
       <table>
-        <tr><td>Data:</td><code>{{ encoded.data }}</code><td></td></tr>
-        <tr><td>Human:</td><code>{{ encoded.human }}</code><td></td></tr>
-      </table>`
+        <tr>
+          <td>Data:</td>
+          <td>
+            <button @click="copyToClipboard(encoded.data)">
+              <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGMSURBVGhD7ZlNSgQxEIV7JSpewmsNnkNc+QMjczL3uvbnEuJCEPS9wTC1SOxXVI0dJR98hE6qq6Z6Qhbd02DQH2fwAb7Be7iCf4Zz+FmR891zCt9hrQHOc/3XOYI38Bl+wNqPq3kBT77H2npN5n+CrMe6YY7hHawVm/MAEo619TlZl/VD8EnUkitaauuKlzDECyzJuBXKU7XYggo/xTO/3XKPMITd87UfT8o6VZiLt1uO9UPMFSNKjEWJV2IklEQ2xmsLJUZCSWRjvLZQYiSURDbGawslRiItkZO0ummJnKTVTUvkJK1uWiInaXXTEjlJq5uWyEla3bRESzEaWJpIAxv4Cm+3Vzuy5iUiDbAo7+NoyZqX4I1FL3xiLLreXu3ImpeINNAFo4GliTQQOj0M3Z1CXkJ5Ig2ETg/DOIVGA0sSaaCLU0h5tdiCRXkfxwihPPwmUBpovdxt0cUpdAVLA4rd4f3A0SWH8BryXf3cJ6Z/Rev0yJrfOyzKf4WjJWt+77ROj6z5wSCHafoCaAaSAjYWfdsAAAAASUVORK5CYII=">
+            </button>
+            <code>{{ encoded.data }}</code>
+          </td>
+        </tr>
+        <tr>
+          <td>Human:</td>
+          <td>
+            <button @click="copyToClipboard(encoded.human)">
+              <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGMSURBVGhD7ZlNSgQxEIV7JSpewmsNnkNc+QMjczL3uvbnEuJCEPS9wTC1SOxXVI0dJR98hE6qq6Z6Qhbd02DQH2fwAb7Be7iCf4Zz+FmR891zCt9hrQHOc/3XOYI38Bl+wNqPq3kBT77H2npN5n+CrMe6YY7hHawVm/MAEo619TlZl/VD8EnUkitaauuKlzDECyzJuBXKU7XYggo/xTO/3XKPMITd87UfT8o6VZiLt1uO9UPMFSNKjEWJV2IklEQ2xmsLJUZCSWRjvLZQYiSURDbGawslRiItkZO0ummJnKTVTUvkJK1uWiInaXXTEjlJq5uWyEla3bRESzEaWJpIAxv4Cm+3Vzuy5iUiDbAo7+NoyZqX4I1FL3xiLLreXu3ImpeINNAFo4GliTQQOj0M3Z1CXkJ5Ig2ETg/DOIVGA0sSaaCLU0h5tdiCRXkfxwihPPwmUBpovdxt0cUpdAVLA4rd4f3A0SWH8BryXf3cJ6Z/Rev0yJrfOyzKf4WjJWt+77ROj6z5wSCHafoCaAaSAjYWfdsAAAAASUVORK5CYII=">
+            </button>
+            <code>{{ encoded.human }}</code>
+          </td>
+        </tr>
+      </table>`,
+      methods: {
+        copyToClipboard(str) {
+          const el = document.createElement('textarea');
+          el.value = str;
+          el.setAttribute('readonly', '');
+          el.style.position = 'absolute';
+          el.style.left = '-9999px';
+          document.body.appendChild(el);
+          el.select();
+          document.execCommand('copy');
+          document.body.removeChild(el);
+        }
+      }
   });
 
   function createId(inputType, factory, value) {
@@ -272,9 +301,11 @@
           <SlickList lockAxis="y" :useDragHandle="true" :lockToContainerEdges="true" v-model="items">
             <SlickItem v-for="(item, index) in items" :key="item.id" :index="index">
               <span v-handle class="handle">
-              <img width="24" height="24" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFbSURBVGhD7Zm7SgRBEEU70ESMfIB+gAamgpiIIOgXGPrIBM0MfGSCfoWxot9hbiD6K8bqPU4XLM0EdtC73U4dOGxRU8veYqB3mQ2OUzc30SYh+Ge0uSUs/Fa0qSVGwxvNLEHAL3ku1xPpca3aJQj2/UervxOO8x9YlOlJMinJks2p7DtBJiFZhse0tFu3HF9no2A9ZqZk6fls9uRjV4YPuSSv5VWs3yU8SWZLzzvOuFmTJ5VIlmz25WslkmV4zMuNrgy7krN4JUpNDzblnCw9nw1vvO3K8CwX5LE8ijXnM9xJZkvPO8642Zb3lUiWbJpfoHlW5WFX/v7E5Xf6TpSaHnD0MVt6Phu+UA66MlzK9AMuJHBu2xdQyXnHcQpzJvvO8D6ZrQ4ef7xJ/gN4kGloelxjxh6nVIct8SJnaESo6VUd3kiXaCq8MbpEc+ENW6LJ8AbBmw3vDIAQfgA6lt89JM7OOgAAAABJRU5ErkJggg==">
+              <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACmSURBVGhD7dRLCoAwEAPQ3kxvpjf3A82mpHRELBnJg+BqIEGxWN9SnyltV476TAflkVQj2vKpRvTKI9IjRuURyRHR8ojUiKflEck3YWb2HvvlqSSEHaokhB2qxGwG9u2pJIQdqiSEHarEbAb27akkhB2qJIQdqsTM7If2K+yXN8p9J+PpCKnyEB0hWR5GI6TLQ29EivLQjkhVHjAiZXlY69PMPlPKCUoozcCEWEO6AAAAAElFTkSuQmCC">
               </span>
-              <button @click="deleteItem(index)">-</button>
+              <button @click="deleteItem(index)">
+                <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIiSURBVGhD7ZgxS1thFIZTikr1FwjSpTiIuCsUVyn+gQ6laxHXgg6iCIqIf6CD0G6lS2eX0qmUCt0Vtaug1KWLSsG+D/SFS3sDSe45yRXuAw+Ek5v3PYHkCzethoZ68UhuylP5W979lcfMeI5rasmo/CK9dDu5hmtrx4YsW7hMrq0dx9ILrsghaXj8Wvr5E1k7bqUXHGHwD8PSz/OdqB1eDtvRyTWh+FQ5k8VTJduQU6vTUyXbnk8t3n1Z4CBcl13zQzpgVfIl7Bd00en+nk6t4me+n8ubyqeWX4yDotIOxRfXwa65kWVBg5BdumZb1uFNsMOWrMRn6cAFBkmQ7R46w3grHfyKQRJku4fOMPghcfAOgyTIdk9PP17teCkd/J5BEmS7h84w5qWDvzJIgmz30BnGY+ngcwZJkO0eOsN4KIs3LBk35mQ6ny46Q+GewAVTDIIh0/l0hfNJuuAZg2DIdD5d4exLFywxCIZM59MVzpp0wS6DYMh0Pl3hvJAu+MAgGDKdT1c4T6ULvjEIhkzn0xXOhHTBBYNgyHQ+XeE8kNfSJWMyCrKcSwddKRxJF00zCIIs59KRxoF00SKDIMhyLh1pvJEuWmYQBFnOpSON4n81ewyCIMu5dKTxXLroI4MgyHIuHWnMSBf9krOyKnOSLOdGHg7/wfH2Xbos2kOZzqS8kmULVPGnfCL7wrh8Jy9l2TLdSAb/QJDZ0NDQcK9otf4AkUDOGZgmnVYAAAAASUVORK5CYII=">
+              </button>
               <${inputType} v-model="item.content"></${inputType}>
             </SlickItem>
           </SlickList>
@@ -316,7 +347,11 @@
             </thead>
             <tbody>
               <tr v-for="(item, index) in items" :key="item.id" :index="index">
-                <td><button @click="deleteItem(index)">-</button></td>
+                <td>
+                  <button @click="deleteItem(index)">
+                    <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIiSURBVGhD7ZgxS1thFIZTikr1FwjSpTiIuCsUVyn+gQ6laxHXgg6iCIqIf6CD0G6lS2eX0qmUCt0Vtaug1KWLSsG+D/SFS3sDSe45yRXuAw+Ek5v3PYHkCzethoZ68UhuylP5W979lcfMeI5rasmo/CK9dDu5hmtrx4YsW7hMrq0dx9ILrsghaXj8Wvr5E1k7bqUXHGHwD8PSz/OdqB1eDtvRyTWh+FQ5k8VTJduQU6vTUyXbnk8t3n1Z4CBcl13zQzpgVfIl7Bd00en+nk6t4me+n8ubyqeWX4yDotIOxRfXwa65kWVBg5BdumZb1uFNsMOWrMRn6cAFBkmQ7R46w3grHfyKQRJku4fOMPghcfAOgyTIdk9PP17teCkd/J5BEmS7h84w5qWDvzJIgmz30BnGY+ngcwZJkO0eOsN4KIs3LBk35mQ6ny46Q+GewAVTDIIh0/l0hfNJuuAZg2DIdD5d4exLFywxCIZM59MVzpp0wS6DYMh0Pl3hvJAu+MAgGDKdT1c4T6ULvjEIhkzn0xXOhHTBBYNgyHQ+XeE8kNfSJWMyCrKcSwddKRxJF00zCIIs59KRxoF00SKDIMhyLh1pvJEuWmYQBFnOpSON4n81ewyCIMu5dKTxXLroI4MgyHIuHWnMSBf9krOyKnOSLOdGHg7/wfH2Xbos2kOZzqS8kmULVPGnfCL7wrh8Jy9l2TLdSAb/QJDZ0NDQcK9otf4AkUDOGZgmnVYAAAAASUVORK5CYII=">
+                  </button>
+                </td>
                 <td><string-input v-model="item.key"></string-input></td>
                 <td><${inputType} v-model="item.content"></${inputType}></td>
               </tr>
@@ -452,5 +487,6 @@
     data: sharedData
   });
 </script>
+<a href="https://icons8.com/">Icons by Icons8</a>
 </body>
 </html>

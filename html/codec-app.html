@@ -24,7 +24,7 @@
     Decode:
     <unknown-encoded></unknown-encoded>
 
-    <select name="id-type" v-model="selectedType">
+    <select name="id-type" v-model="selectedType" title="Select ID Type">
       <option value="string">String</option>
       <option value="boolean">Boolean</option>
       <option value="integer">Integer</option>
@@ -154,7 +154,7 @@
       <div>
         <the-mask placeholder="enter a UUID" mask="hhhhhhhh-hhhh-hhhh-hhhh-hhhhhhhhhhhh" :tokens="hexTokens" :masked="true"
           v-model="valueInput" @input="updateInput($event)"></the-mask>
-        <button @click="generateUUIDValue">UUIDv4</button>
+        <button @click="generateUUIDValue" title="Generate UUID">UUIDv4</button>
       </div>`,
       data() {
         return {
@@ -189,7 +189,7 @@
       <div>
         <input placeholder="enter a Latitude" @keypress="onlyNumber" v-model.number="valueInput.latitude" ></input>°N
         <input placeholder="enter a Longitude" @keypress="onlyNumber" v-model.number="valueInput.longitude"></input>°E
-        <button @click="determineGeolocation">
+        <button @click="determineGeolocation"  title="Current Location">
           <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMGSURBVGhD7ZnLq01RHICPZ96vkpGSAXMi8srIa+CZTJTHnyCKEeVSiLz+AnkMSCITioHwDyBG3q+JSHmG76vzq9Xtau97ztrn7lvnq6+7W3ut32/tffZae+11G1261IdhuASP4QP8gD+bemzZUVyM1q0No3E32sm/JbXuLrTtgLIJX2BfnSyjbddhxxmCB/EPph16jidxBc7GsU09Xomn8SWmbYyxH43ZEUx0AdNOeCe341Aswud/B77CNMY57MhFeOfTxJfRu9xfxuFVTGP5S1TKRkwfm+PYzl2z7QmMeMZej5UwCtPn9wrm+MmNkf4SjiNzZWcPRhIvZAzmwkfwNUZ8p9isOPDeYyTYhrnZiRHfXGUmhNL4ho3g3v0q3qTGTB/RRZgNlwcR2Hm+KnxPRB6XHdm4jxHYF1IRI/EIvml6uFlWxBqMPPcsyMVHjMCzLCjADkf90LIijB31XS9l4wdG4PEWFPAWo37oL1GEsaP+dwty8RUj8AQLCmj1Aowd9c2ZjWcYgedZUEBfj1APFjEfo/5TC3JxESPwXgsKcMAewhjEHpcZxPsw8py3IBeuHiPwY6xi1WjMJxh5zJmNKeigiuDLMDfLMeJ/w8mYlfQx8jg3VcdvLMBI4LQ6A3NhrHSqNlcl3MVIknOQGSvi3rGgKhZifND4dw62y1xMY5qjUvyQibt1y4I2uY0Rz9iV4w7DL4yka7FVNmDEMWaZdVYWzmIkdnehzPqoN7ZJv8LOYMdwjn6HkfwU9hfbRHu/wCZhR9mM0YHfWGaNFLjmsU2034IDwg2MTjzCMnud1rFutLuJA8Z0/IzRGT8Ji0g/G79gzhdiS2zF6JDz+Cr8H56LOV+r2N1oiXSv1ME9FXszDdOtmUtYG5xB3FGLzl3DdMnt8XWM89bNvtpsF/eO0pkl3V3zHyBRbp2lWEvSnWs76hpf0wuzTm0ZgQ8xOut2TLol47nhWGtm4ieMToeWeW5Q4A5bOl16vBoHFQcwLsDjQYe7zS41tIrd7I4wsWmXLvWk0fgH19ZAEofE5EAAAAAASUVORK5CYII=">
         </button>
       </div>
@@ -213,7 +213,7 @@
         <tr>
           <td>Data:</td>
           <td>
-            <button @click="copyToClipboard(encoded.data)">
+            <button @click="copyToClipboard(encoded.data)" title="Copy to Clipboard">
               <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGMSURBVGhD7ZlNSgQxEIV7JSpewmsNnkNc+QMjczL3uvbnEuJCEPS9wTC1SOxXVI0dJR98hE6qq6Z6Qhbd02DQH2fwAb7Be7iCf4Zz+FmR891zCt9hrQHOc/3XOYI38Bl+wNqPq3kBT77H2npN5n+CrMe6YY7hHawVm/MAEo619TlZl/VD8EnUkitaauuKlzDECyzJuBXKU7XYggo/xTO/3XKPMITd87UfT8o6VZiLt1uO9UPMFSNKjEWJV2IklEQ2xmsLJUZCSWRjvLZQYiSURDbGawslRiItkZO0ummJnKTVTUvkJK1uWiInaXXTEjlJq5uWyEla3bRESzEaWJpIAxv4Cm+3Vzuy5iUiDbAo7+NoyZqX4I1FL3xiLLreXu3ImpeINNAFo4GliTQQOj0M3Z1CXkJ5Ig2ETg/DOIVGA0sSaaCLU0h5tdiCRXkfxwihPPwmUBpovdxt0cUpdAVLA4rd4f3A0SWH8BryXf3cJ6Z/Rev0yJrfOyzKf4WjJWt+77ROj6z5wSCHafoCaAaSAjYWfdsAAAAASUVORK5CYII=">
             </button>
             <code>{{ encoded.data }}</code>
@@ -222,7 +222,7 @@
         <tr>
           <td>Human:</td>
           <td>
-            <button @click="copyToClipboard(encoded.human)">
+            <button @click="copyToClipboard(encoded.human)"  title="Copy to Clipboard">
               <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGMSURBVGhD7ZlNSgQxEIV7JSpewmsNnkNc+QMjczL3uvbnEuJCEPS9wTC1SOxXVI0dJR98hE6qq6Z6Qhbd02DQH2fwAb7Be7iCf4Zz+FmR891zCt9hrQHOc/3XOYI38Bl+wNqPq3kBT77H2npN5n+CrMe6YY7hHawVm/MAEo619TlZl/VD8EnUkitaauuKlzDECyzJuBXKU7XYggo/xTO/3XKPMITd87UfT8o6VZiLt1uO9UPMFSNKjEWJV2IklEQ2xmsLJUZCSWRjvLZQYiSURDbGawslRiItkZO0ummJnKTVTUvkJK1uWiInaXXTEjlJq5uWyEla3bRESzEaWJpIAxv4Cm+3Vzuy5iUiDbAo7+NoyZqX4I1FL3xiLLreXu3ImpeINNAFo4GliTQQOj0M3Z1CXkJ5Ig2ETg/DOIVGA0sSaaCLU0h5tdiCRXkfxwihPPwmUBpovdxt0cUpdAVLA4rd4f3A0SWH8BryXf3cJ6Z/Rev0yJrfOyzKf4WjJWt+77ROj6z5wSCHafoCaAaSAjYWfdsAAAAASUVORK5CYII=">
             </button>
             <code>{{ encoded.human }}</code>
@@ -301,15 +301,15 @@
           <SlickList lockAxis="y" :useDragHandle="true" :lockToContainerEdges="true" v-model="items">
             <SlickItem v-for="(item, index) in items" :key="item.id" :index="index">
               <span v-handle class="handle">
-              <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACmSURBVGhD7dRLCoAwEAPQ3kxvpjf3A82mpHRELBnJg+BqIEGxWN9SnyltV476TAflkVQj2vKpRvTKI9IjRuURyRHR8ojUiKflEck3YWb2HvvlqSSEHaokhB2qxGwG9u2pJIQdqiSEHarEbAb27akkhB2qJIQdqsTM7If2K+yXN8p9J+PpCKnyEB0hWR5GI6TLQ29EivLQjkhVHjAiZXlY69PMPlPKCUoozcCEWEO6AAAAAElFTkSuQmCC">
+              <img width="16" height="16" title="Reorder Item" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACmSURBVGhD7dRLCoAwEAPQ3kxvpjf3A82mpHRELBnJg+BqIEGxWN9SnyltV476TAflkVQj2vKpRvTKI9IjRuURyRHR8ojUiKflEck3YWb2HvvlqSSEHaokhB2qxGwG9u2pJIQdqiSEHarEbAb27akkhB2qJIQdqsTM7If2K+yXN8p9J+PpCKnyEB0hWR5GI6TLQ29EivLQjkhVHjAiZXlY69PMPlPKCUoozcCEWEO6AAAAAElFTkSuQmCC">
               </span>
-              <button @click="deleteItem(index)">
+              <button @click="deleteItem(index)" title="Delete Item">
                 <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIiSURBVGhD7ZgxS1thFIZTikr1FwjSpTiIuCsUVyn+gQ6laxHXgg6iCIqIf6CD0G6lS2eX0qmUCt0Vtaug1KWLSsG+D/SFS3sDSe45yRXuAw+Ek5v3PYHkCzethoZ68UhuylP5W979lcfMeI5rasmo/CK9dDu5hmtrx4YsW7hMrq0dx9ILrsghaXj8Wvr5E1k7bqUXHGHwD8PSz/OdqB1eDtvRyTWh+FQ5k8VTJduQU6vTUyXbnk8t3n1Z4CBcl13zQzpgVfIl7Bd00en+nk6t4me+n8ubyqeWX4yDotIOxRfXwa65kWVBg5BdumZb1uFNsMOWrMRn6cAFBkmQ7R46w3grHfyKQRJku4fOMPghcfAOgyTIdk9PP17teCkd/J5BEmS7h84w5qWDvzJIgmz30BnGY+ngcwZJkO0eOsN4KIs3LBk35mQ6ny46Q+GewAVTDIIh0/l0hfNJuuAZg2DIdD5d4exLFywxCIZM59MVzpp0wS6DYMh0Pl3hvJAu+MAgGDKdT1c4T6ULvjEIhkzn0xXOhHTBBYNgyHQ+XeE8kNfSJWMyCrKcSwddKRxJF00zCIIs59KRxoF00SKDIMhyLh1pvJEuWmYQBFnOpSON4n81ewyCIMu5dKTxXLroI4MgyHIuHWnMSBf9krOyKnOSLOdGHg7/wfH2Xbos2kOZzqS8kmULVPGnfCL7wrh8Jy9l2TLdSAb/QJDZ0NDQcK9otf4AkUDOGZgmnVYAAAAASUVORK5CYII=">
               </button>
               <${inputType} v-model="item.content"></${inputType}>
             </SlickItem>
           </SlickList>
-          <button @click="createNewItem">Add New Item</button>
+          <button @click="createNewItem" title="Add Item">Add New Item</button>
           <encoded-output v-bind:encoded="this.encodeOutput"></encoded-output>
         </div>`,
       data: () => ({
@@ -348,7 +348,7 @@
             <tbody>
               <tr v-for="(item, index) in items" :key="item.id" :index="index">
                 <td>
-                  <button @click="deleteItem(index)">
+                  <button @click="deleteItem(index)" title="Delete Mapping">
                     <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIiSURBVGhD7ZgxS1thFIZTikr1FwjSpTiIuCsUVyn+gQ6laxHXgg6iCIqIf6CD0G6lS2eX0qmUCt0Vtaug1KWLSsG+D/SFS3sDSe45yRXuAw+Ek5v3PYHkCzethoZ68UhuylP5W979lcfMeI5rasmo/CK9dDu5hmtrx4YsW7hMrq0dx9ILrsghaXj8Wvr5E1k7bqUXHGHwD8PSz/OdqB1eDtvRyTWh+FQ5k8VTJduQU6vTUyXbnk8t3n1Z4CBcl13zQzpgVfIl7Bd00en+nk6t4me+n8ubyqeWX4yDotIOxRfXwa65kWVBg5BdumZb1uFNsMOWrMRn6cAFBkmQ7R46w3grHfyKQRJku4fOMPghcfAOgyTIdk9PP17teCkd/J5BEmS7h84w5qWDvzJIgmz30BnGY+ngcwZJkO0eOsN4KIs3LBk35mQ6ny46Q+GewAVTDIIh0/l0hfNJuuAZg2DIdD5d4exLFywxCIZM59MVzpp0wS6DYMh0Pl3hvJAu+MAgGDKdT1c4T6ULvjEIhkzn0xXOhHTBBYNgyHQ+XeE8kNfSJWMyCrKcSwddKRxJF00zCIIs59KRxoF00SKDIMhyLh1pvJEuWmYQBFnOpSON4n81ewyCIMu5dKTxXLroI4MgyHIuHWnMSBf9krOyKnOSLOdGHg7/wfH2Xbos2kOZzqS8kmULVPGnfCL7wrh8Jy9l2TLdSAb/QJDZ0NDQcK9otf4AkUDOGZgmnVYAAAAASUVORK5CYII=">
                   </button>
                 </td>
@@ -357,7 +357,7 @@
               </tr>
             </tbody>
           </table>
-          <button @click="createNewItem">Add New Mapping</button>
+          <button @click="createNewItem" title="Add Mapping">Add New Mapping</button>
           <encoded-output v-bind:encoded="this.encodeOutput"></encoded-output>
         </div>`,
       data: () => ({

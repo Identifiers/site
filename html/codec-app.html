@@ -153,7 +153,7 @@
     template: `
       <div>
         <the-mask placeholder="enter a UUID" mask="hhhhhhhh-hhhh-hhhh-hhhh-hhhhhhhhhhhh" :tokens="hexTokens" :masked="true"
-          v-model="valueInput" @input="updateInput($event)"></the-mask>
+          v-model="valueInput" @input="updateInput($event)" class="uuid-entry"></the-mask>
         <button @click="generateUUIDValue" title="Generate UUID">UUIDv4</button>
       </div>`,
       data() {
@@ -209,39 +209,35 @@
   Vue.component('encoded-output', {
     props: ['encoded'],
     template: `
-      <table>
-        <tr>
-          <td>Data:</td>
-          <td>
-            <button @click="copyToClipboard(encoded.data)" title="Copy to Clipboard">
-              <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGMSURBVGhD7ZlNSgQxEIV7JSpewmsNnkNc+QMjczL3uvbnEuJCEPS9wTC1SOxXVI0dJR98hE6qq6Z6Qhbd02DQH2fwAb7Be7iCf4Zz+FmR891zCt9hrQHOc/3XOYI38Bl+wNqPq3kBT77H2npN5n+CrMe6YY7hHawVm/MAEo619TlZl/VD8EnUkitaauuKlzDECyzJuBXKU7XYggo/xTO/3XKPMITd87UfT8o6VZiLt1uO9UPMFSNKjEWJV2IklEQ2xmsLJUZCSWRjvLZQYiSURDbGawslRiItkZO0ummJnKTVTUvkJK1uWiInaXXTEjlJq5uWyEla3bRESzEaWJpIAxv4Cm+3Vzuy5iUiDbAo7+NoyZqX4I1FL3xiLLreXu3ImpeINNAFo4GliTQQOj0M3Z1CXkJ5Ig2ETg/DOIVGA0sSaaCLU0h5tdiCRXkfxwihPPwmUBpovdxt0cUpdAVLA4rd4f3A0SWH8BryXf3cJ6Z/Rev0yJrfOyzKf4WjJWt+77ROj6z5wSCHafoCaAaSAjYWfdsAAAAASUVORK5CYII=">
-            </button>
-            <code>{{ encoded.data }}</code>
-          </td>
-        </tr>
-        <tr>
-          <td>Human:</td>
-          <td>
-            <button @click="copyToClipboard(encoded.human)"  title="Copy to Clipboard">
-              <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGMSURBVGhD7ZlNSgQxEIV7JSpewmsNnkNc+QMjczL3uvbnEuJCEPS9wTC1SOxXVI0dJR98hE6qq6Z6Qhbd02DQH2fwAb7Be7iCf4Zz+FmR891zCt9hrQHOc/3XOYI38Bl+wNqPq3kBT77H2npN5n+CrMe6YY7hHawVm/MAEo619TlZl/VD8EnUkitaauuKlzDECyzJuBXKU7XYggo/xTO/3XKPMITd87UfT8o6VZiLt1uO9UPMFSNKjEWJV2IklEQ2xmsLJUZCSWRjvLZQYiSURDbGawslRiItkZO0ummJnKTVTUvkJK1uWiInaXXTEjlJq5uWyEla3bRESzEaWJpIAxv4Cm+3Vzuy5iUiDbAo7+NoyZqX4I1FL3xiLLreXu3ImpeINNAFo4GliTQQOj0M3Z1CXkJ5Ig2ETg/DOIVGA0sSaaCLU0h5tdiCRXkfxwihPPwmUBpovdxt0cUpdAVLA4rd4f3A0SWH8BryXf3cJ6Z/Rev0yJrfOyzKf4WjJWt+77ROj6z5wSCHafoCaAaSAjYWfdsAAAAASUVORK5CYII=">
-            </button>
-            <code>{{ encoded.human }}</code>
-          </td>
-        </tr>
-      </table>`,
-      methods: {
-        copyToClipboard(str) {
-          const el = document.createElement('textarea');
-          el.value = str;
-          el.setAttribute('readonly', '');
-          el.style.position = 'absolute';
-          el.style.left = '-9999px';
-          document.body.appendChild(el);
-          el.select();
-          document.execCommand('copy');
-          document.body.removeChild(el);
-        }
+      <div class="encoded-layout">
+        <div>Data:</div>
+        <div>
+          <button @click="copyToClipboard(encoded.data)" title="Copy to Clipboard">
+            <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGMSURBVGhD7ZlNSgQxEIV7JSpewmsNnkNc+QMjczL3uvbnEuJCEPS9wTC1SOxXVI0dJR98hE6qq6Z6Qhbd02DQH2fwAb7Be7iCf4Zz+FmR891zCt9hrQHOc/3XOYI38Bl+wNqPq3kBT77H2npN5n+CrMe6YY7hHawVm/MAEo619TlZl/VD8EnUkitaauuKlzDECyzJuBXKU7XYggo/xTO/3XKPMITd87UfT8o6VZiLt1uO9UPMFSNKjEWJV2IklEQ2xmsLJUZCSWRjvLZQYiSURDbGawslRiItkZO0ummJnKTVTUvkJK1uWiInaXXTEjlJq5uWyEla3bRESzEaWJpIAxv4Cm+3Vzuy5iUiDbAo7+NoyZqX4I1FL3xiLLreXu3ImpeINNAFo4GliTQQOj0M3Z1CXkJ5Ig2ETg/DOIVGA0sSaaCLU0h5tdiCRXkfxwihPPwmUBpovdxt0cUpdAVLA4rd4f3A0SWH8BryXf3cJ6Z/Rev0yJrfOyzKf4WjJWt+77ROj6z5wSCHafoCaAaSAjYWfdsAAAAASUVORK5CYII=">
+          </button>
+        </div>
+        <div><code>{{ encoded.data }}</code></div>
+        <div>Human:</div>
+        <div>
+          <button @click="copyToClipboard(encoded.human)" title="Copy to Clipboard">
+            <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGMSURBVGhD7ZlNSgQxEIV7JSpewmsNnkNc+QMjczL3uvbnEuJCEPS9wTC1SOxXVI0dJR98hE6qq6Z6Qhbd02DQH2fwAb7Be7iCf4Zz+FmR891zCt9hrQHOc/3XOYI38Bl+wNqPq3kBT77H2npN5n+CrMe6YY7hHawVm/MAEo619TlZl/VD8EnUkitaauuKlzDECyzJuBXKU7XYggo/xTO/3XKPMITd87UfT8o6VZiLt1uO9UPMFSNKjEWJV2IklEQ2xmsLJUZCSWRjvLZQYiSURDbGawslRiItkZO0ummJnKTVTUvkJK1uWiInaXXTEjlJq5uWyEla3bRESzEaWJpIAxv4Cm+3Vzuy5iUiDbAo7+NoyZqX4I1FL3xiLLreXu3ImpeINNAFo4GliTQQOj0M3Z1CXkJ5Ig2ETg/DOIVGA0sSaaCLU0h5tdiCRXkfxwihPPwmUBpovdxt0cUpdAVLA4rd4f3A0SWH8BryXf3cJ6Z/Rev0yJrfOyzKf4WjJWt+77ROj6z5wSCHafoCaAaSAjYWfdsAAAAASUVORK5CYII=">
+          </button>
+        </div>
+        <div class="encoded-string"><code>{{ encoded.human }}</code></div>
+      </div>`,
+    methods: {
+      copyToClipboard(str) {
+        const el = document.createElement('textarea');
+        el.value = str;
+        el.setAttribute('readonly', '');
+        el.style.position = 'absolute';
+        el.style.left = '-9999px';
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
       }
+    }
   });
 
   function createId(inputType, factory, value) {
@@ -299,14 +295,18 @@
           <hr/>
           <h4>List</h4>
           <SlickList lockAxis="y" :useDragHandle="true" :lockToContainerEdges="true" v-model="items">
-            <SlickItem v-for="(item, index) in items" :key="item.id" :index="index">
-              <span v-handle class="handle">
-              <img width="16" height="16" title="Reorder Item" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACmSURBVGhD7dRLCoAwEAPQ3kxvpjf3A82mpHRELBnJg+BqIEGxWN9SnyltV476TAflkVQj2vKpRvTKI9IjRuURyRHR8ojUiKflEck3YWb2HvvlqSSEHaokhB2qxGwG9u2pJIQdqiSEHarEbAb27akkhB2qJIQdqsTM7If2K+yXN8p9J+PpCKnyEB0hWR5GI6TLQ29EivLQjkhVHjAiZXlY69PMPlPKCUoozcCEWEO6AAAAAElFTkSuQmCC">
-              </span>
-              <button @click="deleteItem(index)" title="Delete Item">
-                <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIiSURBVGhD7ZgxS1thFIZTikr1FwjSpTiIuCsUVyn+gQ6laxHXgg6iCIqIf6CD0G6lS2eX0qmUCt0Vtaug1KWLSsG+D/SFS3sDSe45yRXuAw+Ek5v3PYHkCzethoZ68UhuylP5W979lcfMeI5rasmo/CK9dDu5hmtrx4YsW7hMrq0dx9ILrsghaXj8Wvr5E1k7bqUXHGHwD8PSz/OdqB1eDtvRyTWh+FQ5k8VTJduQU6vTUyXbnk8t3n1Z4CBcl13zQzpgVfIl7Bd00en+nk6t4me+n8ubyqeWX4yDotIOxRfXwa65kWVBg5BdumZb1uFNsMOWrMRn6cAFBkmQ7R46w3grHfyKQRJku4fOMPghcfAOgyTIdk9PP17teCkd/J5BEmS7h84w5qWDvzJIgmz30BnGY+ngcwZJkO0eOsN4KIs3LBk35mQ6ny46Q+GewAVTDIIh0/l0hfNJuuAZg2DIdD5d4exLFywxCIZM59MVzpp0wS6DYMh0Pl3hvJAu+MAgGDKdT1c4T6ULvjEIhkzn0xXOhHTBBYNgyHQ+XeE8kNfSJWMyCrKcSwddKRxJF00zCIIs59KRxoF00SKDIMhyLh1pvJEuWmYQBFnOpSON4n81ewyCIMu5dKTxXLroI4MgyHIuHWnMSBf9krOyKnOSLOdGHg7/wfH2Xbos2kOZzqS8kmULVPGnfCL7wrh8Jy9l2TLdSAb/QJDZ0NDQcK9otf4AkUDOGZgmnVYAAAAASUVORK5CYII=">
-              </button>
-              <${inputType} v-model="item.content"></${inputType}>
+            <SlickItem v-for="(item, index) in items" :key="item.id" :index="index" class="list-layout">
+              <div v-handle class="handle">
+                <img width="16" height="16" title="Reorder Item" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACmSURBVGhD7dRLCoAwEAPQ3kxvpjf3A82mpHRELBnJg+BqIEGxWN9SnyltV476TAflkVQj2vKpRvTKI9IjRuURyRHR8ojUiKflEck3YWb2HvvlqSSEHaokhB2qxGwG9u2pJIQdqiSEHarEbAb27akkhB2qJIQdqsTM7If2K+yXN8p9J+PpCKnyEB0hWR5GI6TLQ29EivLQjkhVHjAiZXlY69PMPlPKCUoozcCEWEO6AAAAAElFTkSuQmCC">
+              </div>
+              <div>
+                <button @click="deleteItem(index)" title="Delete Item">
+                  <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIiSURBVGhD7ZgxS1thFIZTikr1FwjSpTiIuCsUVyn+gQ6laxHXgg6iCIqIf6CD0G6lS2eX0qmUCt0Vtaug1KWLSsG+D/SFS3sDSe45yRXuAw+Ek5v3PYHkCzethoZ68UhuylP5W979lcfMeI5rasmo/CK9dDu5hmtrx4YsW7hMrq0dx9ILrsghaXj8Wvr5E1k7bqUXHGHwD8PSz/OdqB1eDtvRyTWh+FQ5k8VTJduQU6vTUyXbnk8t3n1Z4CBcl13zQzpgVfIl7Bd00en+nk6t4me+n8ubyqeWX4yDotIOxRfXwa65kWVBg5BdumZb1uFNsMOWrMRn6cAFBkmQ7R46w3grHfyKQRJku4fOMPghcfAOgyTIdk9PP17teCkd/J5BEmS7h84w5qWDvzJIgmz30BnGY+ngcwZJkO0eOsN4KIs3LBk35mQ6ny46Q+GewAVTDIIh0/l0hfNJuuAZg2DIdD5d4exLFywxCIZM59MVzpp0wS6DYMh0Pl3hvJAu+MAgGDKdT1c4T6ULvjEIhkzn0xXOhHTBBYNgyHQ+XeE8kNfSJWMyCrKcSwddKRxJF00zCIIs59KRxoF00SKDIMhyLh1pvJEuWmYQBFnOpSON4n81ewyCIMu5dKTxXLroI4MgyHIuHWnMSBf9krOyKnOSLOdGHg7/wfH2Xbos2kOZzqS8kmULVPGnfCL7wrh8Jy9l2TLdSAb/QJDZ0NDQcK9otf4AkUDOGZgmnVYAAAAASUVORK5CYII=">
+                </button>
+              </div>
+              <div>
+                <${inputType} v-model="item.content"></${inputType}>
+              </div>
             </SlickItem>
           </SlickList>
           <button @click="createNewItem" title="Add Item">Add New Item</button>
@@ -379,7 +379,10 @@
   }
 
   Vue.component('unknown-encoded', {
-    template: '<div><string-input v-model="encodedString"/><p>decoded: {{ decodedId }}</p></div>',
+    template: `
+      <div>
+        <string-input v-model="encodedString" class="encoded-entry"/>
+         <code>{{ decodedId }}</code></div>`,
     data: () => ({encodedString: 'Ç/IÒÁIÖêqÉ34uwâêl7T'}),
     computed: {
       decodedId() {
@@ -487,6 +490,24 @@
     data: sharedData
   });
 </script>
+<style>
+  .encoded-layout {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    grid-gap: 4px;
+  }
+  .list-layout {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    grid-gap: 4px;
+  }
+  .encoded-entry {
+    width: 40ch;
+  }
+  .uuid-entry {
+    width: 36ch;
+  }
+</style>
 <a href="https://icons8.com/">Icons by Icons8</a>
 </body>
 </html>

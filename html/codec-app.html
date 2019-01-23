@@ -23,8 +23,8 @@
   <div id="app">
     Decode:
     <unknown-encoded></unknown-encoded>
-
-    <select name="id-type" v-model="selectedType" title="Select ID Type">
+    <hr/>
+    Select ID Type: <select name="id-type" v-model="selectedType" title="Select ID Type">
       <option value="string">String</option>
       <option value="boolean">Boolean</option>
       <option value="integer">Integer</option>
@@ -134,7 +134,7 @@
 
   Vue.component('string-input', {
     ...baseInputComponent,
-    template: '<input placeholder="enter a string value" v-bind:value="valueInput" @input="updateInput($event.target.value.trim())"/>',
+    template: '<input type="id" placeholder="enter a string value" v-bind:value="valueInput" @input="updateInput($event.target.value.trim())"/>',
   });
 
   Vue.component('boolean-input', {
@@ -151,10 +151,14 @@
   Vue.component('uuid-input', {
     ...baseInputComponent,
     template: `
-      <div>
-        <the-mask placeholder="enter a UUID" mask="hhhhhhhh-hhhh-hhhh-hhhh-hhhhhhhhhhhh" :tokens="hexTokens" :masked="true"
-          v-model="valueInput" @input="updateInput($event)" class="uuid-entry"></the-mask>
-        <button @click="generateUUIDValue" title="Generate UUID">UUIDv4</button>
+      <div class="uuid-input">
+        <div>
+          <the-mask type="id"  class="uuid-entry" placeholder="enter a UUID" mask="hhhhhhhh-hhhh-hhhh-hhhh-hhhhhhhhhhhh" :tokens="hexTokens" :masked="true"
+            v-model="valueInput" @input="updateInput($event)"></the-mask>
+        </div>
+        <div>
+          <button @click="generateUUIDValue" title="Generate UUID">UUIDv4</button>
+        </div>
       </div>`,
       data() {
         return {
@@ -382,7 +386,8 @@
     template: `
       <div>
         <string-input v-model="encodedString" class="encoded-entry"/>
-         <code>{{ decodedId }}</code></div>`,
+        <code>{{ decodedId }}</code>
+      </div>`,
     data: () => ({encodedString: 'Ç/IÒÁIÖêqÉ34uwâêl7T'}),
     computed: {
       decodedId() {
@@ -507,7 +512,13 @@
   .uuid-entry {
     width: 36ch;
   }
+  .uuid-input {
+    display: grid;
+    grid-template-columns: 36ch auto;
+    grid-gap: 4px;
+  }
 </style>
+
 <a href="https://icons8.com/">Icons by Icons8</a>
 </body>
 </html>

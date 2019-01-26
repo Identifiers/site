@@ -17,11 +17,12 @@
 
   <div id="app">
     <div class="decode-id-section">
-      <div class="id-section-title">Decode:</div>
+      <div class="id-section-title">Encoded ID String</div>
       <unknown-encoded></unknown-encoded>
     </div>
     <div class="select-id-type">
-      Create ID: <select name="id-type" class="id-type-selector" v-model="selectedType" title="Select ID Type">
+      <div class="id-section-title">Create an ID</div>
+      <select name="id-type" class="id-type-selector" v-model="selectedType" title="Select ID Type">
         <option value="string">String</option>
         <option value="boolean">Boolean</option>
         <option value="integer">Integer</option>
@@ -182,7 +183,7 @@
   Vue.component('datetime-picker', window['vue-ctk-date-time-picker']);
   Vue.component('datetime-input', {
     ...baseInputComponent,
-    template: `<datetime-picker v-model="valueInput" @input="updateInput($event)"></datetime-picker>`
+    template: `<datetime-picker type="id" v-model="valueInput" @input="updateInput($event)"></datetime-picker>`
   });
 
   Vue.component('geo-input', {
@@ -212,14 +213,14 @@
     props: ['encoded'],
     template: `
       <div class="encoded-layout">
-        <div>Data:</div>
+        <div>Data</div>
         <div>
           <button @click="copyToClipboard(encoded.data)" title="Copy to Clipboard">
             <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGMSURBVGhD7ZlNSgQxEIV7JSpewmsNnkNc+QMjczL3uvbnEuJCEPS9wTC1SOxXVI0dJR98hE6qq6Z6Qhbd02DQH2fwAb7Be7iCf4Zz+FmR891zCt9hrQHOc/3XOYI38Bl+wNqPq3kBT77H2npN5n+CrMe6YY7hHawVm/MAEo619TlZl/VD8EnUkitaauuKlzDECyzJuBXKU7XYggo/xTO/3XKPMITd87UfT8o6VZiLt1uO9UPMFSNKjEWJV2IklEQ2xmsLJUZCSWRjvLZQYiSURDbGawslRiItkZO0ummJnKTVTUvkJK1uWiInaXXTEjlJq5uWyEla3bRESzEaWJpIAxv4Cm+3Vzuy5iUiDbAo7+NoyZqX4I1FL3xiLLreXu3ImpeINNAFo4GliTQQOj0M3Z1CXkJ5Ig2ETg/DOIVGA0sSaaCLU0h5tdiCRXkfxwihPPwmUBpovdxt0cUpdAVLA4rd4f3A0SWH8BryXf3cJ6Z/Rev0yJrfOyzKf4WjJWt+77ROj6z5wSCHafoCaAaSAjYWfdsAAAAASUVORK5CYII=">
           </button>
         </div>
         <div><code>{{ encoded.data }}</code></div>
-        <div>Human:</div>
+        <div>Human</div>
         <div>
           <button @click="copyToClipboard(encoded.human)" title="Copy to Clipboard">
             <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGMSURBVGhD7ZlNSgQxEIV7JSpewmsNnkNc+QMjczL3uvbnEuJCEPS9wTC1SOxXVI0dJR98hE6qq6Z6Qhbd02DQH2fwAb7Be7iCf4Zz+FmR891zCt9hrQHOc/3XOYI38Bl+wNqPq3kBT77H2npN5n+CrMe6YY7hHawVm/MAEo619TlZl/VD8EnUkitaauuKlzDECyzJuBXKU7XYggo/xTO/3XKPMITd87UfT8o6VZiLt1uO9UPMFSNKjEWJV2IklEQ2xmsLJUZCSWRjvLZQYiSURDbGawslRiItkZO0ummJnKTVTUvkJK1uWiInaXXTEjlJq5uWyEla3bRESzEaWJpIAxv4Cm+3Vzuy5iUiDbAo7+NoyZqX4I1FL3xiLLreXu3ImpeINNAFo4GliTQQOj0M3Z1CXkJ5Ig2ETg/DOIVGA0sSaaCLU0h5tdiCRXkfxwihPPwmUBpovdxt0cUpdAVLA4rd4f3A0SWH8BryXf3cJ6Z/Rev0yJrfOyzKf4WjJWt+77ROj6z5wSCHafoCaAaSAjYWfdsAAAAASUVORK5CYII=">
@@ -247,7 +248,10 @@
       template: `
         <div class="id-section">
           <div class="id-section-title">Single</div>
-          <${inputType} v-model="inputValue"></${inputType}>
+          <div class="single-layout">
+            <div>Value</div>
+            <div><${inputType} v-model="inputValue"></${inputType}></div>
+          </div>
           <encoded-output v-bind:encoded="encodeOutput"></encoded-output>
         </div>`,
       data: () => ({inputValue: value}),
@@ -309,7 +313,7 @@
               </div>
             </SlickItem>
           </SlickList>
-          <button class="new-list-item" @click="createNewItem" title="Add Item">Add New Item</button>
+          <button class="new-structured-item" @click="createNewItem" title="Add Item">Add New Item</button>
           <encoded-output v-bind:encoded="this.encodeOutput"></encoded-output>
         </div>`,
       data: () => ({
@@ -336,30 +340,19 @@
       template: `
         <div class="id-section">
           <div class="id-section-title">Map</div>
-          <table class="map-layout">
-            <thead>
-              <tr>
-                <th></th>
-                <th>Key</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(item, index) in items" :key="item.id" :index="index">
-                <td>
-                  <button @click="deleteItem(index)" title="Delete Mapping">
-                    <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIiSURBVGhD7ZgxS1thFIZTikr1FwjSpTiIuCsUVyn+gQ6laxHXgg6iCIqIf6CD0G6lS2eX0qmUCt0Vtaug1KWLSsG+D/SFS3sDSe45yRXuAw+Ek5v3PYHkCzethoZ68UhuylP5W979lcfMeI5rasmo/CK9dDu5hmtrx4YsW7hMrq0dx9ILrsghaXj8Wvr5E1k7bqUXHGHwD8PSz/OdqB1eDtvRyTWh+FQ5k8VTJduQU6vTUyXbnk8t3n1Z4CBcl13zQzpgVfIl7Bd00en+nk6t4me+n8ubyqeWX4yDotIOxRfXwa65kWVBg5BdumZb1uFNsMOWrMRn6cAFBkmQ7R46w3grHfyKQRJku4fOMPghcfAOgyTIdk9PP17teCkd/J5BEmS7h84w5qWDvzJIgmz30BnGY+ngcwZJkO0eOsN4KIs3LBk35mQ6ny46Q+GewAVTDIIh0/l0hfNJuuAZg2DIdD5d4exLFywxCIZM59MVzpp0wS6DYMh0Pl3hvJAu+MAgGDKdT1c4T6ULvjEIhkzn0xXOhHTBBYNgyHQ+XeE8kNfSJWMyCrKcSwddKRxJF00zCIIs59KRxoF00SKDIMhyLh1pvJEuWmYQBFnOpSON4n81ewyCIMu5dKTxXLroI4MgyHIuHWnMSBf9krOyKnOSLOdGHg7/wfH2Xbos2kOZzqS8kmULVPGnfCL7wrh8Jy9l2TLdSAb/QJDZ0NDQcK9otf4AkUDOGZgmnVYAAAAASUVORK5CYII=">
-                  </button>
-                </td>
-                <td><string-input v-model="item.key"></string-input></td>
-                <td><${inputType} v-model="item.content"></${inputType}></td>
-              </tr>
-              <tr>
-                <td></td>
-                <td colspan="2"><button @click="createNewItem" title="Add Mapping">Add New Mapping</button></td>
-              </tr>
-            </tbody>
-          </table>
+            <div class="map-layout">
+              <div></div>
+              <div class="map-header">Key</div>
+              <div class="map-header">Value</div>
+            </div>
+            <div class="map-layout" v-for="(item, index) in items" :key="item.id" :index="index">
+              <button @click="deleteItem(index)" title="Delete Mapping">
+                <img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIiSURBVGhD7ZgxS1thFIZTikr1FwjSpTiIuCsUVyn+gQ6laxHXgg6iCIqIf6CD0G6lS2eX0qmUCt0Vtaug1KWLSsG+D/SFS3sDSe45yRXuAw+Ek5v3PYHkCzethoZ68UhuylP5W979lcfMeI5rasmo/CK9dDu5hmtrx4YsW7hMrq0dx9ILrsghaXj8Wvr5E1k7bqUXHGHwD8PSz/OdqB1eDtvRyTWh+FQ5k8VTJduQU6vTUyXbnk8t3n1Z4CBcl13zQzpgVfIl7Bd00en+nk6t4me+n8ubyqeWX4yDotIOxRfXwa65kWVBg5BdumZb1uFNsMOWrMRn6cAFBkmQ7R46w3grHfyKQRJku4fOMPghcfAOgyTIdk9PP17teCkd/J5BEmS7h84w5qWDvzJIgmz30BnGY+ngcwZJkO0eOsN4KIs3LBk35mQ6ny46Q+GewAVTDIIh0/l0hfNJuuAZg2DIdD5d4exLFywxCIZM59MVzpp0wS6DYMh0Pl3hvJAu+MAgGDKdT1c4T6ULvjEIhkzn0xXOhHTBBYNgyHQ+XeE8kNfSJWMyCrKcSwddKRxJF00zCIIs59KRxoF00SKDIMhyLh1pvJEuWmYQBFnOpSON4n81ewyCIMu5dKTxXLroI4MgyHIuHWnMSBf9krOyKnOSLOdGHg7/wfH2Xbos2kOZzqS8kmULVPGnfCL7wrh8Jy9l2TLdSAb/QJDZ0NDQcK9otf4AkUDOGZgmnVYAAAAASUVORK5CYII=">
+              </button>
+              <div><string-input v-model="item.key"></string-input></div>
+              <div><${inputType} v-model="item.content"></${inputType}></div>
+            </div>
+          <button class="new-structured-item" @click="createNewItem" title="Add Mapping">Add New Mapping</button>
           <encoded-output v-bind:encoded="this.encodeOutput"></encoded-output>
         </div>`,
       data: () => ({
@@ -495,6 +488,9 @@
   });
 </script>
 <style>
+  body {
+    color: #515050;
+  }
   .decode-id-section {
     margin-left: 0.5rem;
     padding: 0.5rem;
@@ -506,7 +502,7 @@
     padding: 0.5rem;
   }
   .id-type-selector {
-    width: 50%;
+    width: 30%;
   }
   .encoded-layout {
     display: grid;
@@ -529,7 +525,14 @@
     margin-bottom: 0.25em;
   }
   input[type="id"] {
-    width: 80%;
+    width: 95%;
+  }
+  .single-layout {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    grid-gap: 5px;
+    top-margin: 0.5rem;
   }
   .list-layout {
     display: grid;
@@ -538,11 +541,18 @@
     grid-gap: 5px;
     margin: 0.5rem;
   }
-  .new-list-item {
+  .new-structured-item {
     margin-left: 28px;
   }
   .map-layout {
-    width: 90%;
+    display: grid;
+    grid-template-columns: 32px 1fr 1fr;
+    align-items: center;
+    grid-gap: 5px;
+    margin: 0.5rem;
+  }
+  .map-header {
+    font-weight: bold;
   }
   .uuid-entry {
     width: 36ch;

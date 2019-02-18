@@ -374,13 +374,14 @@
   }
 
   Vue.component('unknown-encoded', {
+    props: ['encodedId'],
     template: `
       <div>
         <string-input v-model="encodedString" class="encoded-entry"/>
         <br/>
         <code>{{ decodedId }}</code>
       </div>`,
-    data: () => ({encodedString: 'Ç/IÒÁIÖêqÉ34uwâêl7T'}),
+    data: () => ({encodedString: encodedId}),
     computed: {
       decodedId() {
         try {
@@ -479,8 +480,14 @@
     () => ({latitude: 0, longitude: 0})));
 
   const sharedData = {
-    selectedType: "string"
+    encodedId: 'Ç/IÒÁIÖêqÉ34uwâêl7T',
+    selectedType: 'string'
   };
+  const params = (new URL(document.location)).searchParams;
+  const encodedId = params.get('encodedId');
+  if (encodedId) {
+    sharedData.encodedId = encodedId;
+  }
 
   const app = new Vue({
     el: '#app',

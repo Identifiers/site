@@ -381,7 +381,7 @@
         <br/>
         <code>{{ decodedId }}</code>
       </div>`,
-    data: () => ({encodedString: encodedId}),
+    data: () => ({encodedString: sharedData.encodedId}),
     computed: {
       decodedId() {
         try {
@@ -485,7 +485,7 @@
   };
   const params = (new URL(document.location)).searchParams;
   const encodedId = params.get('encodedId');
-  if (encodedId) {
+  if (!!encodedId) {
     sharedData.encodedId = encodedId;
   }
 
